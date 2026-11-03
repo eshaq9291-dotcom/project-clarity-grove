@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, Gem, Gift, ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
 import { Page, ProductCard } from "@/components/Shell";
-import { categories, DISCOUNT_CODE, logoUrl, products } from "@/lib/products";
+import { categories, DISCOUNT_CODE, products } from "@/lib/products";
+import homeDark from "@/assets/jood-home-dark.png.asset.json";
+import homeLight from "@/assets/jood-home-light.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,7 +24,8 @@ function Index() {
   return (
     <Page>
       <section className="text-center">
-        <img src={logoUrl} alt="شعار جود" className="mx-auto size-40 object-contain drop-shadow-[0_8px_24px_var(--primary)]" />
+        <img src={homeLight.url} alt="جود | JOOD" className="mx-auto w-full max-w-md rounded-2xl border object-cover dark:hidden" />
+        <img src={homeDark.url} alt="جود | JOOD" className="mx-auto hidden w-full max-w-md rounded-2xl border object-cover dark:block" />
         <h1 className="mt-4 font-display text-3xl font-bold text-primary">جود | JOOD</h1>
         <p className="mt-2 text-lg font-semibold">لأن أناقتكم لا تقبل إلا الأفضل</p>
         <p className="mt-2 text-sm text-muted-foreground">شيلان رجالية ونسائية فاخرة | حقائب نسائية راقية | صنادل كعب مميزة | أرقى خيارات الـ Makeup</p>
