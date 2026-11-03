@@ -6,9 +6,9 @@ import { validateSettings } from "@/lib/settings.functions";
 const s = { yer_per_sar: 140, yer_per_usd: 530 };
 
 describe("pricing rules", () => {
-  it("launch code JOOD2024 gives 25% off", () => {
-    expect(DISCOUNT_CODE).toBe("JOOD2024");
-    expect(DISCOUNT_RATE).toBe(0.25);
+  it("first-order code JOOD15 gives 15% off", () => {
+    expect(DISCOUNT_CODE).toBe("JOOD15");
+    expect(DISCOUNT_RATE).toBe(0.15);
   });
   it("1 SAR = 140 YER", () => expect(100 * ratesFor(s).YER).toBe(14000));
   it("1 USD = 530 YER", () => expect((530 / 140) * ratesFor(s).USD).toBeCloseTo(1));

@@ -4,6 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, Gem, Gift, ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
 import { Page, ProductCard } from "@/components/Shell";
+import { PromoSlider } from "@/components/PromoSlider";
 import { categories, DISCOUNT_CODE, logoUrl, products } from "@/lib/products";
 
 export const Route = createFileRoute("/")({
@@ -23,6 +24,7 @@ function Index() {
   const list = tab === "top" ? [...products].sort((a, b) => b.reviews - a.reviews) : [...products].reverse();
   return (
     <Page>
+      <PromoSlider />
       <section className="mx-auto mb-6 w-full max-w-xs overflow-hidden rounded-3xl border border-primary/30">
         <img src={identityBeige.url} alt="هوية جود" className="block aspect-square w-full object-cover dark:hidden" />
         <img src={identityBlack.url} alt="هوية جود" className="hidden aspect-square w-full object-cover dark:block" />
@@ -41,7 +43,7 @@ function Index() {
         <div>
           <div className="flex items-center gap-1 text-xs text-primary"><BadgeCheck className="size-4" /> إصدار ملكي محدود</div>
           <div className="mt-1 font-bold">مجموعة جود الحصرية</div>
-          <div className="text-xs text-muted-foreground">خصم استثنائي حتى 25% بمناسبة التدشين الرسمي</div>
+          <div className="text-xs text-muted-foreground">خصم 15% على طلبك الأول</div>
         </div>
         <div className="rounded-lg border border-dashed border-primary/60 px-3 py-2 text-center">
           <div className="text-[10px] text-muted-foreground">كود الخصم</div>

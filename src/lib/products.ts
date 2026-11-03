@@ -115,5 +115,5 @@ export const currencies = {
 } as const;
 export type Currency = keyof typeof currencies;
 
-export const DISCOUNT_CODE = "JOOD2024";
-export const DISCOUNT_RATE = 0.25;
+export const DISCOUNT_CODE = "JOOD15";
+export const DISCOUNT_RATE = 0.15;
