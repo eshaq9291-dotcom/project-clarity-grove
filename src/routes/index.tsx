@@ -2,9 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, Gem, Gift, ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
 import { Page, ProductCard } from "@/components/Shell";
-import { categories, DISCOUNT_CODE, products } from "@/lib/products";
-import identityLight from "@/assets/jood-identity-light.png.asset.json";
-import identityDark from "@/assets/jood-identity-dark.png.asset.json";
+import { categories, DISCOUNT_CODE, logoUrl, products } from "@/lib/products";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -13,8 +11,6 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "متجر جود: شيلان رجالية ونسائية فاخرة، حقائب راقية، صنادل كعب ومستحضرات تجميل." },
       { property: "og:title", content: "جود | JOOD | أناقة لا تقبل إلا بالأفضل" },
       { property: "og:description", content: "شيلان فاخرة وحقائب راقية وصنادل سهرة ومكياج فاخر." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -26,10 +22,7 @@ function Index() {
   return (
     <Page>
       <section className="text-center">
-        <div className="mx-auto aspect-square w-80 max-w-full max-h-[36svh]">
-          <img src={identityLight.url} alt="هوية جود بالذهبي على خلفية بيج" className="mx-auto h-full max-w-full object-contain dark:hidden" fetchPriority="high" />
-          <img src={identityDark.url} alt="هوية جود بالذهبي على خلفية سوداء" className="mx-auto hidden h-full max-w-full object-contain dark:block" fetchPriority="high" />
-        </div>
+        <img src={logoUrl} alt="شعار جود" className="mx-auto size-40 object-contain drop-shadow-[0_8px_24px_var(--primary)]" />
         <h1 className="mt-4 font-display text-3xl font-bold text-primary">جود | JOOD</h1>
         <p className="mt-2 text-lg font-semibold">لأن أناقتكم لا تقبل إلا الأفضل</p>
         <p className="mt-2 text-sm text-muted-foreground">شيلان رجالية ونسائية فاخرة | حقائب نسائية راقية | صنادل كعب مميزة | أرقى خيارات الـ Makeup</p>
