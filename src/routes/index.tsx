@@ -1,5 +1,3 @@
-import identityBeige from "@/assets/jood-identity-beige.png.asset.json";
-import identityBlack from "@/assets/jood-identity-black.png.asset.json";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, Gem, Gift, ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
@@ -24,10 +22,6 @@ function Index() {
   const list = tab === "top" ? [...products].sort((a, b) => b.reviews - a.reviews) : [...products].reverse();
   return (
     <Page>
-      <section className="mx-auto mb-6 w-full max-w-[180px] overflow-hidden rounded-2xl border border-primary/30">
-        <img src={identityBeige.url} alt="هوية جود" className="block aspect-square w-full object-cover dark:hidden" />
-        <img src={identityBlack.url} alt="هوية جود" className="hidden aspect-square w-full object-cover dark:block" />
-      </section>
       <section className="text-center">
         <img src={logoUrl} alt="شعار جود" className="mx-auto size-40 object-contain drop-shadow-[0_8px_24px_var(--primary)]" />
         <h1 className="mt-4 font-display text-3xl font-bold text-primary">جود | JOOD</h1>

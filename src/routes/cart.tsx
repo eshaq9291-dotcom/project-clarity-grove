@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Gift, Minus, Plus, X } from "lucide-react";
 import { useState } from "react";
 import { Page } from "@/components/Shell";
+import { IdentityArt } from "@/components/IdentityArt";
 import { currencies, DISCOUNT_CODE, DISCOUNT_RATE, getProduct, type Currency } from "@/lib/products";
 import { useStore } from "@/lib/store";
 
@@ -31,10 +32,11 @@ function Cart() {
   const { items, subtotal, discount, total } = useTotals(code);
 
   if (!items.length)
-    return <Page><div className="mt-16 text-center"><h1 className="text-xl font-bold">حقيبتك فارغة</h1><Link to="/categories" className="mt-4 inline-block rounded-xl bg-gold px-6 py-3 font-bold text-primary-foreground">تسوّق الآن</Link></div></Page>;
+    return <Page><IdentityArt /><div className="mt-8 text-center"><h1 className="text-xl font-bold">حقيبتك فارغة</h1><Link to="/categories" className="mt-4 inline-block rounded-xl bg-gold px-6 py-3 font-bold text-primary-foreground">تسوّق الآن</Link></div></Page>;
 
   return (
     <Page>
+      <IdentityArt />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">مقتنياتك الفاخرة ({items.length})</h1>
         <button onClick={clear} className="text-xs text-destructive">تفريغ الحقيبة</button>

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Page, ProductCard } from "@/components/Shell";
+import { IdentityArt } from "@/components/IdentityArt";
 import { products } from "@/lib/products";
 import { useStore } from "@/lib/store";
 
@@ -20,6 +21,7 @@ function Wishlist() {
   const list = products.filter((p) => wishlist.includes(p.id));
   return (
     <Page>
+      <IdentityArt />
       <h1 className="text-2xl font-bold">قائمة رغباتي الملكية</h1>
       <p className="mt-1 text-sm text-muted-foreground">{list.length} قطع محفوظة لاختيار إطلالتك القادمة.</p>
       {list.length > 0 && (
