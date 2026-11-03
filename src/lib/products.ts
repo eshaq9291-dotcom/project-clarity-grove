@@ -5,6 +5,8 @@ import catBags from "@/assets/cat-bags.jpg.asset.json";
 import catHeels from "@/assets/cat-heels.jpg.asset.json";
 import catMakeup from "@/assets/cat-makeup.jpg.asset.json";
 import pMen from "@/assets/p-men-shawl.jpg.asset.json";
+import pMenBlack from "@/assets/p-men-shawl-black.jpg";
+import pMenIvory from "@/assets/p-men-shawl-ivory.jpg";
 import pWomen from "@/assets/p-women-shawl.jpg.asset.json";
 import pBag from "@/assets/p-bag.jpg.asset.json";
 import pHeels from "@/assets/p-heels.jpg.asset.json";
@@ -37,6 +39,8 @@ export type Product = {
   colors: string[];
   size: string;
   description: string;
+  // Fallback photo per color when no admin-uploaded photos exist for that color.
+  colorImages?: Record<string, string>;
 };
 
 // Hex swatch for each color name used in the catalog (for the circle picker).
@@ -59,6 +63,7 @@ export const products: Product[] = [
     id: "JD-9801", name: "شال كشميري مطرز ملكي بخيوط الذهب", details: "رجالي فاخر • صوف نقي 100%",
     category: "men-shawls", price: 1850, oldPrice: 2300, rating: 4.9, reviews: 84, badge: "قطعة ملكية",
     image: pMen.url, colors: ["كحلي ملكي", "أسود عتيق", "عاجي فضي"], size: "200 × 70 سم",
+    colorImages: { "أسود عتيق": pMenBlack, "عاجي فضي": pMenIvory },
     description: "صوف كشمير نقي بحياكة ذهبية يدوية، يأتي في تغليف إهداء مذهب مع بطاقة بخط ديواني.",
   },
   {

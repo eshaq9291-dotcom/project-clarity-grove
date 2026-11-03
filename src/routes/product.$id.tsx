@@ -27,11 +27,11 @@ export const Route = createFileRoute("/product/$id")({
 function ProductPage() {
   const p = Route.useLoaderData();
   const { format, add, toggleWish, wishlist } = useStore();
-  const [color, setColor] = useState(p.colors[0]);
+  const [color, setColor] = useState<string>(p.colors[0] ?? "");
   const [added, setAdded] = useState(false);
   const { images } = useProductImages(p.id);
   const gallery = images.filter((i) => i.color === color).map((i) => i.url);
-  const shown = gallery.length ? gallery : [p.image];
+  const shown = gallery.length ? gallery : [p.colorImages?.[color] ?? p.image];
   const [idx, setIdx] = useState(0);
   const current = shown[Math.min(idx, shown.length - 1)] ?? p.image;
   return (
