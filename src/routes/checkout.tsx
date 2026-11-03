@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, Upload } from "lucide-react";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { placeOrder } from "@/lib/orders.functions";
 import { Page } from "@/components/Shell";
 import { sanaaZones, wallets, yerToSar } from "@/lib/products";
 import { useStore } from "@/lib/store";
@@ -21,7 +23,10 @@ export const Route = createFileRoute("/checkout")({
 
 function Checkout() {
   const { code = "" } = Route.useSearch();
-  const { format, clear } = useStore();
+  const { format, clear, cart, currency } = useStore();
+  const submit = useServerFn(placeOrder);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
   const { items, subtotal, discount, total } = useTotals(code);
   const [done, setDone] = useState<string | null>(null);
   const [zone, setZone] = useState("");
@@ -38,6 +43,7 @@ function Checkout() {
           <CheckCircle2 className="mx-auto size-16 text-primary" />
           <h1 className="mt-4 text-2xl font-bold">تم استلام طلبك</h1>
           <p className="mt-2 text-muted-foreground">رقم الطلب: {done}</p>
+          {pay === "wallet" && <p className="mt-1 text-sm text-muted-foreground">سنراجع إشعار الحوالة ونؤكد طلبك قريباً.</p>}
           <Link to="/" className="mt-6 inline-block rounded-xl bg-gold px-6 py-3 font-bold text-primary-foreground">العودة للرئيسية</Link>
         </div>
       </Page>
@@ -54,16 +60,30 @@ function Checkout() {
       <h1 className="text-2xl font-bold">الشحن والدفع</h1>
       <form
         className="mt-4 space-y-3"
-        onSubmit={(e) => { e.preventDefault(); setDone("JD-" + Math.floor(100000 + Math.random() * 900000)); clear(); }}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const f = new FormData(e.currentTarget);
+          setBusy(true); setErr(null);
+          try {
+            const r = await submit({ data: {
+              name: String(f.get("name")), phone: String(f.get("phone")), address: String(f.get("address")),
+              zone, items: cart, code, currency, payment: pay,
+              wallet: pay === "wallet" ? wallet : undefined,
+              receipt: pay === "wallet" ? receipt ?? undefined : undefined,
+            } });
+            setDone(r.orderNumber); clear();
+          } catch (x) { setErr(x instanceof Error ? x.message : "حدث خطأ"); }
+          finally { setBusy(false); }
+        }}
       >
-        <input required placeholder="الاسم الكامل" className={field} />
-        <input required type="tel" placeholder="رقم الجوال" className={field} />
+        <input required name="name" placeholder="الاسم الكامل" className={field} />
+        <input required name="phone" type="tel" placeholder="رقم الجوال" className={field} />
         <label className="block text-sm font-semibold">المنطقة داخل صنعاء</label>
         <select required value={zone} onChange={(e) => setZone(e.target.value)} className={field}>
           <option value="">اختر المنطقة</option>
           {sanaaZones.map((z) => <option key={z.id} value={z.id}>{z.name} — {format(yerToSar(z.feeYER))}</option>)}
         </select>
-        <textarea required placeholder="العنوان التفصيلي (الشارع، أقرب معلم)" rows={2} className={field} />
+        <textarea required name="address" placeholder="العنوان التفصيلي (الشارع، أقرب معلم)" rows={2} className={field} />
 
         <div className="text-sm font-semibold">طريقة الدفع</div>
         <div className="grid grid-cols-2 gap-2">
@@ -82,7 +102,7 @@ function Checkout() {
               {receipt ? "تغيير الصورة" : "رفع إشعار الحوالة"}
               <input
                 type="file" accept="image/*" required className="sr-only"
-                onChange={(e) => { const f = e.target.files?.[0]; if (f) setReceipt(URL.createObjectURL(f)); }}
+                onChange={(e) => { const f = e.target.files?.[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => setReceipt(String(rd.result)); rd.readAsDataURL(f); }}
               />
             </label>
           </div>
@@ -94,7 +114,8 @@ function Checkout() {
           <Row l="التوصيل" v={zone ? format(shipping) : "اختر المنطقة"} />
           <div className="border-t pt-2"><Row l="الإجمالي" v={format(total + shipping)} bold /></div>
         </div>
-        <button className="w-full rounded-xl bg-gold py-3.5 font-bold text-primary-foreground shadow-gold">تأكيد الطلب</button>
+        {err && <p className="text-sm text-destructive">{err}</p>}
+        <button disabled={busy} className="w-full rounded-xl bg-gold py-3.5 font-bold text-primary-foreground shadow-gold disabled:opacity-60">{busy ? (pay === "wallet" ? "جارٍ إرسال الطلب وقراءة الإشعار..." : "جارٍ إرسال الطلب...") : "تأكيد الطلب"}</button>
       </form>
     </Page>
   );
