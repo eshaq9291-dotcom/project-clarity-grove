@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
-import { Heart, Home, LayoutGrid, Moon, ShoppingBag, Star, Sun } from "lucide-react";
+import { Link, useCanGoBack, useRouter, useRouterState } from "@tanstack/react-router";
+import { ArrowRight, Heart, Home, LayoutGrid, Moon, ShoppingBag, Star, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { logoUrl, type Product } from "@/lib/products";
 import { useStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
 
 function ThemeToggle() {
   const [dark, setDark] = useState(true);
@@ -100,5 +101,26 @@ export function ProductCard({ p }: { p: Product }) {
 }
 
 export function Page({ children }: { children: React.ReactNode }) {
-  return <main className="mx-auto max-w-3xl px-4 pt-5 pb-28">{children}</main>;
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  return (
+    <main className="mx-auto max-w-3xl px-4 pt-5 pb-28">
+      {pathname !== "/" && (
+        <div className="mb-4">
+          <Button asChild variant="outline" size="sm" className="text-primary">
+            <Link to="/" aria-label="الرجوع للخلف" title="الرجوع للخلف" onClick={(event) => {
+              if (canGoBack && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+                event.preventDefault();
+                router.history.back();
+              }
+            }}>
+              <ArrowRight aria-hidden="true" /> رجوع
+            </Link>
+          </Button>
+        </div>
+      )}
+      {children}
+    </main>
+  );
 }
