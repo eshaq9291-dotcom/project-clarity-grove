@@ -21,6 +21,10 @@ function Index() {
   const list = tab === "top" ? [...products].sort((a, b) => b.reviews - a.reviews) : [...products].reverse();
   return (
     <Page>
+      <section className="-mx-4 -mt-2 mb-6 overflow-hidden rounded-b-3xl sm:mx-0 sm:rounded-3xl">
+        <img src={identityBeige.url} alt="هوية جود" className="block aspect-square w-full object-cover dark:hidden" />
+        <img src={identityBlack.url} alt="هوية جود" className="hidden aspect-square w-full object-cover dark:block" />
+      </section>
       <section className="text-center">
         <img src={logoUrl} alt="شعار جود" className="mx-auto size-40 object-contain drop-shadow-[0_8px_24px_var(--primary)]" />
         <h1 className="mt-4 font-display text-3xl font-bold text-primary">جود | JOOD</h1>
