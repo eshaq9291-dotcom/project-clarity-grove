@@ -76,7 +76,7 @@ function Checkout() {
             <div className="grid grid-cols-2 gap-2">
               {wallets.map((w) => <button type="button" key={w.id} onClick={() => setWallet(w.id)} className={chip(wallet === w.id)}>{w.name}</button>)}
             </div>
-            <p className="text-sm">حوّل مبلغ <b className="text-primary">{format(total + shipping)}</b> إلى حساب {selected.name} رقم <b className="tracking-wider">{selected.account}</b> ثم ارفع صورة الإشعار.</p>
+            <p className="text-sm">حوّل مبلغ <b className="text-primary">{format(total + shipping)}</b> إلى حساب {selected.name} {selected.account ? <>رقم <b className="tracking-wider">{selected.account}</b></> : <>(سيظهر الرقم قريباً)</>} ثم ارفع صورة الإشعار.</p>
             <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
               {receipt ? <img src={receipt} alt="إشعار الحوالة" className="max-h-48 rounded-lg" /> : <Upload className="size-6 text-primary" />}
               {receipt ? "تغيير الصورة" : "رفع إشعار الحوالة"}
