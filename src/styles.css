@@ -100,3 +100,9 @@
 @utility shadow-gold { box-shadow: var(--shadow-gold); }
 @utility font-display { font-family: var(--font-display); }
 @utility no-scrollbar { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+
+@media print {
+  body * { visibility: hidden; }
+  #invoice, #invoice * { visibility: visible; }
+  #invoice { position: absolute; inset: 0 0 auto 0; border: none; }
+}
