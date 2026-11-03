@@ -58,10 +58,10 @@ export function PromoSlider() {
           ))}
         </div>
       </div>
-      <button onClick={prev} aria-label="السابق" className="absolute top-1/2 right-2 z-10 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-primary bg-background/70 text-primary backdrop-blur">
+      <button onClick={prev} aria-label="السابق" className="absolute top-[30%] md:top-1/2 right-2 z-10 grid size-8 md:size-10 -translate-y-1/2 place-items-center rounded-full border border-primary bg-background/70 text-primary backdrop-blur">
         <ChevronRight className="size-5" />
       </button>
-      <button onClick={next} aria-label="التالي" className="absolute top-1/2 left-2 z-10 grid size-10 -translate-y-1/2 place-items-center rounded-full border border-primary bg-background/70 text-primary backdrop-blur">
+      <button onClick={next} aria-label="التالي" className="absolute top-[30%] md:top-1/2 left-2 z-10 grid size-8 md:size-10 -translate-y-1/2 place-items-center rounded-full border border-primary bg-background/70 text-primary backdrop-blur">
         <ChevronLeft className="size-5" />
       </button>
       <div className="mt-3 flex justify-center gap-2">
