@@ -12,6 +12,10 @@ import pBag from "@/assets/p-bag.jpg.asset.json";
 import pHeels from "@/assets/p-heels.jpg.asset.json";
 import pMakeup from "@/assets/p-makeup.jpg.asset.json";
 import pClutch from "@/assets/p-clutch.jpg.asset.json";
+import pBagBrown from "@/assets/p-bag-brown.jpg";
+import pHeelsSilver from "@/assets/p-heels-silver.jpg";
+import pMakeupNeutral from "@/assets/p-makeup-neutral.jpg";
+import pClutchGold from "@/assets/p-clutch-gold.jpg";
 
 export const logoUrl = logo;
 
@@ -76,24 +80,28 @@ export const products: Product[] = [
     id: "JD-5530", name: "حقيبة يد جلدية سوداء بلمسات الذهب", details: "جلد طبيعي إيطالي • حلية مذهبة",
     category: "bags", price: 2650, rating: 4.9, reviews: 67, badge: "قطعة مميزة",
     image: pBag.url, colors: ["أسود", "بني"], size: "متوسط (M)",
+    colorImages: { "أسود": pBag.url, "بني": pBagBrown },
     description: "جلد عجل إيطالي محبب مع حلية «جود» المطلية بذهب 24 قيراط. إصدار محدود.",
   },
   {
     id: "JD-3310", name: "صندل كعب كريستالي للسهرة", details: "مرصع يدوياً • كعب 9.5 سم",
     category: "heels", price: 1980, rating: 4.9, reviews: 35, badge: "سهرة راقية",
     image: pHeels.url, colors: ["ذهبي", "فضي"], size: "36 – 41",
+    colorImages: { "ذهبي": pHeels.url, "فضي": pHeelsSilver },
     description: "صندل سهرة مرصع بالكريستال يدوياً بتصميم باريسي أنيق.",
   },
   {
     id: "JD-1150", name: "مجموعة مكياج المخمل الملكية", details: "إصدار Royal Velvet Box الذهبي",
     category: "makeup", price: 950, rating: 4.9, reviews: 91, badge: "Makeup",
     image: pMakeup.url, colors: ["دافئ", "محايد"], size: "صندوق كامل",
+    colorImages: { "دافئ": pMakeup.url, "محايد": pMakeupNeutral },
     description: "صندوق مستحضرات تجميل فاخر بتغليف ذهبي مزخرف يضم كل ما تحتاجينه لإطلالة السهرة.",
   },
   {
     id: "JD-4470", name: "كلتش مرصع باللؤلؤ", details: "حقيبة سهرة فخمة مع سلسلة ذهب",
     category: "bags", price: 1650, rating: 5.0, reviews: 28, badge: "إصدار محدود",
     image: pClutch.url, colors: ["لؤلؤي", "ذهبي"], size: "صغير (S)",
+    colorImages: { "لؤلؤي": pClutch.url, "ذهبي": pClutchGold },
     description: "كلتش صلب للعرائس مرصع يدوياً باللؤلؤ والكريستال مع سلسلة ذهبية.",
   },
 ];

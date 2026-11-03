@@ -5,6 +5,7 @@ import { Page } from "@/components/Shell";
 import { COLOR_HEX, getProduct } from "@/lib/products";
 import { useStore } from "@/lib/store";
 import { useProductImages } from "@/lib/product-images";
+import { resolveProductGallery } from "@/lib/product-gallery";
 
 export const Route = createFileRoute("/product/$id")({
   loader: ({ params }) => {
@@ -18,6 +19,8 @@ export const Route = createFileRoute("/product/$id")({
       { name: "description", content: loaderData?.description ?? "" },
       { property: "og:title", content: loaderData?.name ?? "جود | JOOD" },
       { property: "og:description", content: loaderData?.description ?? "" },
+      { property: "og:type", content: "product" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   notFoundComponent: () => <Page><p className="text-center">القطعة غير موجودة. <Link to="/" className="text-primary">العودة</Link></p></Page>,
@@ -30,8 +33,7 @@ function ProductPage() {
   const [color, setColor] = useState<string>(p.colors[0] ?? "");
   const [added, setAdded] = useState(false);
   const { images } = useProductImages(p.id);
-  const gallery = images.filter((i) => i.color === color).map((i) => i.url);
-  const shown = gallery.length ? gallery : [p.colorImages?.[color] ?? p.image];
+  const shown = resolveProductGallery(p, color, images);
   const [idx, setIdx] = useState(0);
   const current = shown[Math.min(idx, shown.length - 1)] ?? p.image;
   return (
@@ -74,7 +76,7 @@ function ProductPage() {
       <h2 className="mt-5 font-semibold">اللون: <span className="text-primary">{color}</span></h2>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         {p.colors.map((c) => (
-          <button key={c} onClick={() => { setColor(c); setIdx(0); }} aria-label={`اللون ${c}`} title={c}
+          <button key={c} onClick={() => { setColor(c); setIdx(0); }} aria-label={`اللون ${c}`} aria-pressed={color === c} title={c}
             className={`grid size-11 place-items-center rounded-full transition ${color === c ? "border-[3px] border-primary shadow-gold ring-4 ring-primary/50 scale-110" : "border-2 border-border"}`}>
             <span className="size-7 rounded-full border border-black/10" style={{ backgroundColor: COLOR_HEX[c] ?? "#888" }} />
           </button>
