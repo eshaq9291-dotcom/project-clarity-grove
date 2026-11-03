@@ -51,11 +51,10 @@ export function BottomNav() {
     { to: "/", label: "الرئيسية", icon: Home },
     { to: "/categories", label: "الأقسام", icon: LayoutGrid },
     { to: "/wishlist", label: "رغباتي", icon: Heart },
-    { to: "/cart", label: "الحقيبة", icon: ShoppingBag },
   ] as const;
   return (
     <nav className="fixed inset-x-0 bottom-0 z-30 border-t bg-surface/95 backdrop-blur">
-      <div className="mx-auto grid max-w-3xl grid-cols-4">
+      <div className="mx-auto grid max-w-3xl grid-cols-3">
         {items.map(({ to, label, icon: Icon }) => (
           <Link key={to} to={to} activeOptions={{ exact: to === "/" }}
             className="flex flex-col items-center gap-1 py-2.5 text-xs text-muted-foreground"
