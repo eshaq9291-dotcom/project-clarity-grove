@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { placeOrder } from "@/lib/orders.functions";
 import { Page } from "@/components/Shell";
-import { sanaaZones, wallets, yerToSar } from "@/lib/products";
+import { yerToSar } from "@/lib/settings";
 import { useStore } from "@/lib/store";
 import { Row, useTotals } from "./cart";
 
@@ -23,7 +23,9 @@ export const Route = createFileRoute("/checkout")({
 
 function Checkout() {
   const { code = "" } = Route.useSearch();
-  const { format, clear, cart, currency } = useStore();
+  const { format, clear, cart, currency, settings } = useStore();
+  const { zones: sanaaZones } = settings;
+  const wallets = settings.wallets.filter((w) => w.account.trim());
   const submit = useServerFn(placeOrder);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -31,10 +33,11 @@ function Checkout() {
   const [done, setDone] = useState<string | null>(null);
   const [zone, setZone] = useState("");
   const [pay, setPay] = useState<"cod" | "wallet">("cod");
-  const [wallet, setWallet] = useState(wallets[0]?.id ?? "");
+  const [walletChoice, setWallet] = useState("");
+  const wallet = wallets.some((w) => w.id === walletChoice) ? walletChoice : (wallets[0]?.id ?? "");
   const [receipt, setReceipt] = useState<string | null>(null);
 
-  const shipping = yerToSar(sanaaZones.find((z) => z.id === zone)?.feeYER ?? 0);
+  const shipping = yerToSar(settings, sanaaZones.find((z) => z.id === zone)?.feeYER ?? 0);
 
   if (done)
     return (
@@ -53,7 +56,7 @@ function Checkout() {
 
   const field = "w-full rounded-xl border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary";
   const chip = (on: boolean) => `rounded-lg border py-2.5 text-sm ${on ? "border-primary bg-accent text-accent-foreground" : ""}`;
-  const selected = wallets.find((w) => w.id === wallet) ?? wallets[0]!;
+  const selected = wallets.find((w) => w.id === wallet) ?? wallets[0] ?? { id: "", name: "", account: "" };
 
   return (
     <Page>
@@ -81,22 +84,22 @@ function Checkout() {
         <label className="block text-sm font-semibold">المنطقة داخل صنعاء</label>
         <select required value={zone} onChange={(e) => setZone(e.target.value)} className={field}>
           <option value="">اختر المنطقة</option>
-          {sanaaZones.map((z) => <option key={z.id} value={z.id}>{z.name} — {format(yerToSar(z.feeYER))}</option>)}
+          {sanaaZones.map((z) => <option key={z.id} value={z.id}>{z.name} — {format(yerToSar(settings, z.feeYER))}</option>)}
         </select>
         <textarea required name="address" placeholder="العنوان التفصيلي (الشارع، أقرب معلم)" rows={2} className={field} />
 
         <div className="text-sm font-semibold">طريقة الدفع</div>
         <div className="grid grid-cols-2 gap-2">
           <button type="button" onClick={() => setPay("cod")} className={chip(pay === "cod")}>الدفع عند الاستلام</button>
-          <button type="button" onClick={() => setPay("wallet")} className={chip(pay === "wallet")}>محفظة / حوالة بنكية</button>
+          {wallets.length > 0 && <button type="button" onClick={() => setPay("wallet")} className={chip(pay === "wallet")}>محفظة / حوالة بنكية</button>}
         </div>
 
-        {pay === "wallet" && (
+        {pay === "wallet" && wallets.length > 0 && (
           <div className="space-y-3 rounded-xl border bg-card p-4">
             <div className="grid grid-cols-2 gap-2">
               {wallets.map((w) => <button type="button" key={w.id} onClick={() => setWallet(w.id)} className={chip(wallet === w.id)}>{w.name}</button>)}
             </div>
-            <p className="text-sm">حوّل مبلغ <b className="text-primary">{format(total + shipping)}</b> إلى حساب {selected.name} {selected.account ? <>رقم <b className="tracking-wider">{selected.account}</b></> : <>(سيظهر الرقم قريباً)</>} ثم ارفع صورة الإشعار.</p>
+            <p className="text-sm">حوّل مبلغ <b className="text-primary">{format(total + shipping)}</b> إلى حساب {selected.name} رقم <b className="tracking-wider">{selected.account}</b> ثم ارفع صورة الإشعار.</p>
             <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
               {receipt ? <img src={receipt} alt="إشعار الحوالة" className="max-h-48 rounded-lg" /> : <Upload className="size-6 text-primary" />}
               {receipt ? "تغيير الصورة" : "رفع إشعار الحوالة"}

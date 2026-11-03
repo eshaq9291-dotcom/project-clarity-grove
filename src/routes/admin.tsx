@@ -8,6 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { confirmPayment } from "@/lib/orders.functions";
 import { expectedInCurrency } from "@/lib/receipt-check";
+import { useStore } from "@/lib/store";
+import { SettingsPanel } from "@/components/SettingsPanel";
+import { ProductPhotosPanel } from "@/components/ProductPhotosPanel";
 import type { Tables } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/admin")({
@@ -98,11 +101,14 @@ function Orders() {
   return (
     <Page>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">الطلبات</h1>
+        <h1 className="text-2xl font-bold">لوحة التحكم</h1>
         <button onClick={() => supabase.auth.signOut()} className="flex items-center gap-1 text-sm text-muted-foreground"><LogOut className="size-4" /> خروج</button>
       </div>
+      {orders && <SettingsPanel />}
+      {orders && <ProductPhotosPanel />}
       {denied && <p className="mt-6 text-muted-foreground">هذا الحساب ليس حساب صاحب المتجر.</p>}
       {orders?.length === 0 && <p className="mt-6 text-muted-foreground">لا توجد طلبات بعد.</p>}
+      {orders && <h2 className="mt-8 text-xl font-bold">الطلبات</h2>}
       <div className="mt-4 space-y-4">
         {orders?.map((o) => <OrderCard key={o.id} o={o} onChange={load} />)}
       </div>
@@ -112,6 +118,7 @@ function Orders() {
 
 function OrderCard({ o, onChange }: { o: Order; onChange: () => void }) {
   const confirm = useServerFn(confirmPayment);
+  const { settings } = useStore();
   const [img, setImg] = useState<string | null>(null);
   const [ack, setAck] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -121,7 +128,7 @@ function OrderCard({ o, onChange }: { o: Order; onChange: () => void }) {
 
   const items = (o.items as { name: string; qty: number }[]) ?? [];
   const risky = o.payment_method === "cod" || o.amount_mismatch !== false || o.extraction_status !== "done";
-  const expected = expectedInCurrency(Number(o.total_sar), o.receipt_currency);
+  const expected = expectedInCurrency(Number(o.total_sar), o.receipt_currency, settings);
   const statusLabel: Record<string, string> = { pending: "بانتظار الدفع", awaiting_confirmation: "بانتظار تأكيدك", paid: "مدفوع", cancelled: "ملغي" };
 
   return (

@@ -80,41 +80,12 @@ export const products: Product[] = [
 
 export const getProduct = (id: string) => products.find((p) => p.id === id);
 
-/** Exchange rates: how many Yemeni riyals one unit buys. Product prices are stored in SAR. */
-export const YER_PER_SAR = 140;
-export const YER_PER_USD = 530;
-
 export const currencies = {
-  SAR: { label: "ريال سعودي", symbol: "ر.س", rate: 1, flag: "🇸🇦" },
-  USD: { label: "دولار", symbol: "$", rate: YER_PER_SAR / YER_PER_USD, flag: "🇺🇸" },
-  YER: { label: "ريال يمني", symbol: "ر.ي", rate: YER_PER_SAR, flag: "🇾🇪" },
+  SAR: { label: "ريال سعودي", symbol: "ر.س", flag: "🇸🇦" },
+  USD: { label: "دولار", symbol: "$", flag: "🇺🇸" },
+  YER: { label: "ريال يمني", symbol: "ر.ي", flag: "🇾🇪" },
 } as const;
 export type Currency = keyof typeof currencies;
 
 export const DISCOUNT_CODE = "JOOD2024";
 export const DISCOUNT_RATE = 0.25;
-
-/** Delivery fees inside Sana'a, in Yemeni riyals. */
-export const sanaaZones: { id: string; name: string; feeYER: number }[] = [
-  { id: "hadda", name: "حدة", feeYER: 1000 },
-  { id: "sabeen", name: "السبعين", feeYER: 1000 },
-  { id: "safiya", name: "الصافية", feeYER: 1000 },
-  { id: "tahrir", name: "التحرير", feeYER: 1500 },
-  { id: "maeen", name: "معين", feeYER: 1500 },
-  { id: "wahda", name: "الوحدة", feeYER: 1500 },
-  { id: "shuub", name: "شعوب", feeYER: 2000 },
-  { id: "azal", name: "آزال", feeYER: 2000 },
-  { id: "bani-alharith", name: "بني الحارث", feeYER: 2000 },
-  { id: "sawan", name: "سعوان (منطقة بعيدة)", feeYER: 2500 },
-  { id: "hiziz", name: "حزيز (منطقة بعيدة)", feeYER: 2500 },
-  { id: "airport", name: "المطار (منطقة بعيدة)", feeYER: 2500 },
-];
-/** Converts a YER amount to the SAR base used for all prices. */
-export const yerToSar = (yer: number) => yer / currencies.YER.rate;
-
-export const wallets = [
-  { id: "kuraimi", name: "الكريمي جوال كاش", account: "" },
-  { id: "jaib", name: "جيب", account: "" },
-  { id: "onecash", name: "ون كاش", account: "" },
-  { id: "floosak", name: "فلوسك", account: "" },
-];

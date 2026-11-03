@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { currencies, DISCOUNT_CODE, DISCOUNT_RATE, getProduct, sanaaZones, wallets, yerToSar } from "./products";
+import { currencies, DISCOUNT_CODE, DISCOUNT_RATE, getProduct } from "./products";
+import { normalizeSettings, yerToSar } from "./settings";
 import { isAmountMismatch } from "./receipt-check";
 
 type PlaceOrderInput = {
@@ -19,15 +20,23 @@ type PlaceOrderInput = {
 export const placeOrder = createServerFn({ method: "POST" })
   .inputValidator((d: PlaceOrderInput) => {
     if (!d.name?.trim() || !d.phone?.trim() || !d.address?.trim()) throw new Error("بيانات ناقصة");
-    if (!sanaaZones.some((z) => z.id === d.zone)) throw new Error("منطقة غير صحيحة");
+    if (typeof d.zone !== "string" || !d.zone) throw new Error("منطقة غير صحيحة");
     if (!Array.isArray(d.items) || d.items.length === 0 || d.items.length > 50) throw new Error("الحقيبة فارغة");
     if (d.payment === "wallet") {
-      if (!wallets.some((w) => w.id === d.wallet)) throw new Error("محفظة غير صحيحة");
+      if (typeof d.wallet !== "string" || !d.wallet) throw new Error("محفظة غير صحيحة");
       if (!d.receipt?.startsWith("data:image/") || d.receipt.length > 8_000_000) throw new Error("صورة الإشعار مطلوبة");
     }
     return d;
   })
   .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row } = await supabaseAdmin.from("store_settings").select("yer_per_sar, yer_per_usd, wallets, zones").eq("id", 1).maybeSingle();
+    const settings = normalizeSettings(row);
+    const zone = settings.zones.find((z) => z.id === data.zone);
+    if (!zone) throw new Error("منطقة غير صحيحة");
+    const walletInfo = data.payment === "wallet" ? settings.wallets.find((w) => w.id === data.wallet) : undefined;
+    if (data.payment === "wallet" && !walletInfo?.account) throw new Error("هذه المحفظة غير متاحة حالياً");
+
     // Totals are always recomputed on the server from the catalog.
     const items = data.items
       .map((i) => ({ p: getProduct(i.id), qty: Math.max(1, Math.min(20, Math.floor(i.qty))) }))
@@ -35,12 +44,9 @@ export const placeOrder = createServerFn({ method: "POST" })
     if (!items.length) throw new Error("الحقيبة فارغة");
     const subtotal = items.reduce((s, i) => s + i.p.price * i.qty, 0);
     const discount = data.code.trim().toUpperCase() === DISCOUNT_CODE ? subtotal * DISCOUNT_RATE : 0;
-    const zone = sanaaZones.find((z) => z.id === data.zone)!;
-    const shipping = yerToSar(zone.feeYER);
+    const shipping = yerToSar(settings, zone.feeYER);
     const total = subtotal - discount + shipping;
     const orderNumber = "JD-" + Date.now().toString().slice(-8);
-
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     let receiptPath: string | null = null;
     if (data.payment === "wallet" && data.receipt) {
@@ -65,10 +71,10 @@ export const placeOrder = createServerFn({ method: "POST" })
         discount_sar: discount,
         shipping_sar: shipping,
         total_sar: total,
-        total_yer: Math.round(total * currencies.YER.rate),
+        total_yer: Math.round(total * settings.yer_per_sar),
         display_currency: data.currency in currencies ? data.currency : "YER",
         payment_method: data.payment,
-        wallet: data.payment === "wallet" ? wallets.find((w) => w.id === data.wallet)!.name : null,
+        wallet: walletInfo ? `${walletInfo.name} (${walletInfo.account})` : null,
         receipt_path: receiptPath,
         extraction_status: receiptPath ? "processing" : "none",
         status: receiptPath ? "awaiting_confirmation" : "pending",
@@ -91,7 +97,7 @@ export const placeOrder = createServerFn({ method: "POST" })
                 receipt_wallet: r.data.wallet,
                 receipt_reference: r.data.reference,
                 receipt_notes: r.data.notes,
-                amount_mismatch: isAmountMismatch(total, r.data.amount, r.data.currency),
+                amount_mismatch: isAmountMismatch(total, r.data.amount, r.data.currency, settings),
               }
             : { extraction_status: "failed", receipt_notes: "تعذرت قراءة الإشعار تلقائياً، راجعه يدوياً." },
         )

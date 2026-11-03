@@ -104,6 +104,63 @@ export type Database = {
         }
         Relationships: []
       }
+      product_images: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          path: string
+          product_id: string
+          sort: number
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          id?: string
+          path: string
+          product_id: string
+          sort?: number
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          path?: string
+          product_id?: string
+          sort?: number
+        }
+        Relationships: []
+      }
+      store_settings: {
+        Row: {
+          id: number
+          updated_at: string
+          updated_by: string | null
+          wallets: Json
+          yer_per_sar: number
+          yer_per_usd: number
+          zones: Json
+        }
+        Insert: {
+          id?: number
+          updated_at?: string
+          updated_by?: string | null
+          wallets?: Json
+          yer_per_sar?: number
+          yer_per_usd?: number
+          zones?: Json
+        }
+        Update: {
+          id?: number
+          updated_at?: string
+          updated_by?: string | null
+          wallets?: Json
+          yer_per_sar?: number
+          yer_per_usd?: number
+          zones?: Json
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

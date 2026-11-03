@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { currencies, type Currency } from "./products";
+import { supabase } from "@/integrations/supabase/client";
+import { fallbackSettings, normalizeSettings, ratesFor, type StoreSettings } from "./settings";
 
 type CartItem = { id: string; qty: number };
 type Store = {
@@ -13,6 +15,8 @@ type Store = {
   toggleWish: (id: string) => void;
   setCurrency: (c: Currency) => void;
   format: (sar: number) => string;
+  settings: StoreSettings;
+  reloadSettings: () => Promise<void>;
 };
 
 const Ctx = createContext<Store | null>(null);
@@ -23,6 +27,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [currency, setCurrency] = useState<Currency>("YER");
   const [loaded, setLoaded] = useState(false);
+  const [settings, setSettings] = useState<StoreSettings>(fallbackSettings);
+  const reloadSettings = async () => {
+    const { data } = await supabase.from("store_settings").select("yer_per_sar, yer_per_usd, wallets, zones").eq("id", 1).maybeSingle();
+    setSettings(normalizeSettings(data));
+  };
+  useEffect(() => { void reloadSettings(); }, []);
 
   useEffect(() => {
     try {
@@ -38,7 +48,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [cart, wishlist, currency, loaded]);
 
   const value: Store = {
-    cart, wishlist, currency, setCurrency,
+    cart, wishlist, currency, setCurrency, settings, reloadSettings,
     add: (id) => setCart((c) => (c.some((i) => i.id === id) ? c.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i)) : [...c, { id, qty: 1 }])),
     setQty: (id, qty) => setCart((c) => (qty < 1 ? c.filter((i) => i.id !== id) : c.map((i) => (i.id === id ? { ...i, qty } : i)))),
     remove: (id) => setCart((c) => c.filter((i) => i.id !== id)),
@@ -46,7 +56,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     toggleWish: (id) => setWishlist((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id])),
     format: (sar) => {
       const c = currencies[currency];
-      return `${(sar * c.rate).toLocaleString("en-US", { maximumFractionDigits: currency === "USD" ? 2 : 0 })} ${c.symbol}`;
+      return `${(sar * ratesFor(settings)[currency]).toLocaleString("en-US", { maximumFractionDigits: currency === "USD" ? 2 : 0 })} ${c.symbol}`;
     },
   };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
