@@ -159,6 +159,7 @@ function InvoiceView({ inv }: { inv: Invoice }) {
   useEffect(() => { const t = setTimeout(() => window.print(), 600); return () => clearTimeout(t); }, []);
   return (
     <div id="invoice" className="mx-auto max-w-xl rounded-2xl border border-primary/40 bg-card p-6 text-sm">
+      <img src={invoiceLogo.url} alt="شعار جود" className="mx-auto mb-4 size-28 rounded-xl bg-white object-contain p-1" />
       <div className="flex items-start justify-between border-b pb-4">
         <div><div className="font-display text-2xl font-bold text-primary">جود | JOOD</div><div className="text-xs text-muted-foreground">لأن أناقتكم لا تقبل إلا الأفضل</div></div>
         <div className="text-left"><div className="font-bold">فاتورة إلكترونية</div><div dir="ltr" className="font-mono">#{inv.id}</div><div className="text-xs text-muted-foreground">{inv.date}</div></div>
