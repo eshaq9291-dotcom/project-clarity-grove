@@ -75,7 +75,7 @@ function ProductPage() {
       <div className="mt-3 flex flex-wrap items-center gap-3">
         {p.colors.map((c) => (
           <button key={c} onClick={() => { setColor(c); setIdx(0); }} aria-label={`اللون ${c}`} title={c}
-            className={`grid size-10 place-items-center rounded-full border-2 transition ${color === c ? "border-primary ring-2 ring-primary/40" : "border-border"}`}>
+            className={`grid size-11 place-items-center rounded-full transition ${color === c ? "border-[3px] border-primary shadow-gold ring-4 ring-primary/50 scale-110" : "border-2 border-border"}`}>
             <span className="size-7 rounded-full border border-black/10" style={{ backgroundColor: COLOR_HEX[c] ?? "#888" }} />
           </button>
         ))}
