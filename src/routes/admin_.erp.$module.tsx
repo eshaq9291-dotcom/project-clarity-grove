@@ -26,7 +26,7 @@ export const Route = createFileRoute("/admin_/erp/$module")({
     ] };
   },
   notFoundComponent: () => <Page><p className="mt-16 text-center">الوحدة غير موجودة.</p></Page>,
-  errorComponent: ({ error }) => <Page><p className="mt-16 text-center text-destructive">{error.message}</p></Page>,
+  errorComponent: ({ error }) => <Page><p className="mt-16 text-center text-destructive">{error instanceof Error ? error.message : String(error)}</p></Page>,
   component: () => <AdminGate><ModulePage /></AdminGate>,
 });
 
@@ -241,7 +241,7 @@ function Customers() {
       </Card>
       <Card title="تسجيل سداد">
         <form className="grid grid-cols-2 gap-2 md:grid-cols-4" onSubmit={(e) => { const f = fd(e); const form = e.currentTarget; const [t, id] = String(f.get("party")).split(":");
-          s2.run(() => supabase.from("payments").insert({ party_type: t, party_id: id, amount_sar: Number(f.get("amount")), memo: String(f.get("memo") || "") || null }), form); }}>
+          s2.run(() => supabase.from("payments").insert({ party_type: t ?? "", party_id: id ?? "", amount_sar: Number(f.get("amount")), memo: String(f.get("memo") || "") || null }), form); }}>
           <select name="party" required className={field}><option value="">الطرف</option>
             <optgroup label="عملاء">{cust.map((c) => <option key={c.id} value={`customer:${c.id}`}>{c.name}</option>)}</optgroup>
             <optgroup label="موردون">{sup.map((s) => <option key={s.id} value={`supplier:${s.id}`}>{s.name}</option>)}</optgroup>
