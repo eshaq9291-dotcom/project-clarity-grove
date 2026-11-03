@@ -1,3 +1,4 @@
+import invoiceLogo from "@/assets/jood-logo-gold.png.asset.json";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, CheckCircle2, Copy, Printer, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
