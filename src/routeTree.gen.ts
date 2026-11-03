@@ -15,7 +15,9 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as AdminDashboardRouteImport } from './routes/admin_.dashboard'
 import { Route as ProductIdRouteImport } from './routes/product.$id'
+import { Route as AdminErpModuleRouteImport } from './routes/admin_.erp.$module'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -47,9 +49,19 @@ const WishlistRoute = WishlistRouteImport.update({
   path: '/wishlist',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin_/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductIdRoute = ProductIdRouteImport.update({
   id: '/product/$id',
   path: '/product/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminErpModuleRoute = AdminErpModuleRouteImport.update({
+  id: '/admin_/erp/$module',
+  path: '/admin/erp/$module',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -60,7 +72,9 @@ export interface FileRoutesByFullPath {
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/product/$id': typeof ProductIdRoute
+  '/admin/erp/$module': typeof AdminErpModuleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +83,9 @@ export interface FileRoutesByTo {
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/product/$id': typeof ProductIdRoute
+  '/admin/erp/$module': typeof AdminErpModuleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,7 +95,9 @@ export interface FileRoutesById {
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
   '/wishlist': typeof WishlistRoute
+  '/admin_/dashboard': typeof AdminDashboardRoute
   '/product/$id': typeof ProductIdRoute
+  '/admin_/erp/$module': typeof AdminErpModuleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,7 +108,9 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/wishlist'
+    | '/admin/dashboard'
     | '/product/$id'
+    | '/admin/erp/$module'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,7 +119,9 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/wishlist'
+    | '/admin/dashboard'
     | '/product/$id'
+    | '/admin/erp/$module'
   id:
     | '__root__'
     | '/'
@@ -108,7 +130,9 @@ export interface FileRouteTypes {
     | '/categories'
     | '/checkout'
     | '/wishlist'
+    | '/admin_/dashboard'
     | '/product/$id'
+    | '/admin_/erp/$module'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,7 +142,9 @@ export interface RootRouteChildren {
   CategoriesRoute: typeof CategoriesRoute
   CheckoutRoute: typeof CheckoutRoute
   WishlistRoute: typeof WishlistRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
   ProductIdRoute: typeof ProductIdRoute
+  AdminErpModuleRoute: typeof AdminErpModuleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -165,11 +191,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WishlistRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/dashboard': {
+      id: '/admin_/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/product/$id': {
       id: '/product/$id'
       path: '/product/$id'
       fullPath: '/product/$id'
       preLoaderRoute: typeof ProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/erp/$module': {
+      id: '/admin_/erp/$module'
+      path: '/admin/erp/$module'
+      fullPath: '/admin/erp/$module'
+      preLoaderRoute: typeof AdminErpModuleRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -182,7 +222,9 @@ const rootRouteChildren: RootRouteChildren = {
   CategoriesRoute: CategoriesRoute,
   CheckoutRoute: CheckoutRoute,
   WishlistRoute: WishlistRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
   ProductIdRoute: ProductIdRoute,
+  AdminErpModuleRoute: AdminErpModuleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

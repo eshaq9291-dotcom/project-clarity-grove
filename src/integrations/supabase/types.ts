@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      customers: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      ledger: {
+        Row: {
+          account: string
+          created_at: string
+          credit_sar: number
+          debit_sar: number
+          id: string
+          memo: string | null
+          ref: string | null
+        }
+        Insert: {
+          account: string
+          created_at?: string
+          credit_sar?: number
+          debit_sar?: number
+          id?: string
+          memo?: string | null
+          ref?: string | null
+        }
+        Update: {
+          account?: string
+          created_at?: string
+          credit_sar?: number
+          debit_sar?: number
+          id?: string
+          memo?: string | null
+          ref?: string | null
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           address: string
@@ -104,6 +158,33 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount_sar: number
+          created_at: string
+          id: string
+          memo: string | null
+          party_id: string
+          party_type: string
+        }
+        Insert: {
+          amount_sar: number
+          created_at?: string
+          id?: string
+          memo?: string | null
+          party_id: string
+          party_type: string
+        }
+        Update: {
+          amount_sar?: number
+          created_at?: string
+          id?: string
+          memo?: string | null
+          party_id?: string
+          party_type?: string
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           color: string
@@ -130,6 +211,181 @@ export type Database = {
           sort?: number
         }
         Relationships: []
+      }
+      purchases: {
+        Row: {
+          created_at: string
+          id: string
+          paid_sar: number
+          product_id: string
+          qty: number
+          supplier_id: string
+          total_sar: number | null
+          unit_cost_sar: number
+          warehouse_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          paid_sar?: number
+          product_id: string
+          qty: number
+          supplier_id: string
+          total_sar?: number | null
+          unit_cost_sar: number
+          warehouse_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          paid_sar?: number
+          product_id?: string
+          qty?: number
+          supplier_id?: string
+          total_sar?: number | null
+          unit_cost_sar?: number
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchases_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchases_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales: {
+        Row: {
+          channel: string
+          created_at: string
+          customer_id: string | null
+          id: string
+          paid_sar: number
+          product_id: string
+          qty: number
+          total_sar: number | null
+          unit_cost_sar: number
+          unit_price_sar: number
+          warehouse_id: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          paid_sar?: number
+          product_id: string
+          qty: number
+          total_sar?: number | null
+          unit_cost_sar?: number
+          unit_price_sar: number
+          warehouse_id: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          paid_sar?: number
+          product_id?: string
+          qty?: number
+          total_sar?: number | null
+          unit_cost_sar?: number
+          unit_price_sar?: number
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock: {
+        Row: {
+          barcode: string | null
+          product_id: string
+          qty: number
+          warehouse_id: string
+        }
+        Insert: {
+          barcode?: string | null
+          product_id: string
+          qty?: number
+          warehouse_id: string
+        }
+        Update: {
+          barcode?: string | null
+          product_id?: string
+          qty?: number
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_movements: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          qty_change: number
+          reason: string
+          ref: string | null
+          warehouse_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          qty_change: number
+          reason: string
+          ref?: string | null
+          warehouse_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          qty_change?: number
+          reason?: string
+          ref?: string | null
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       store_settings: {
         Row: {
@@ -161,6 +417,30 @@ export type Database = {
         }
         Relationships: []
       }
+      suppliers: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -179,11 +459,46 @@ export type Database = {
         }
         Relationships: []
       }
+      warehouses: {
+        Row: {
+          created_at: string
+          id: string
+          location: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      erp_move_stock: {
+        Args: {
+          _delta: number
+          _product: string
+          _reason: string
+          _ref: string
+          _wh: string
+        }
+        Returns: undefined
+      }
+      erp_stocktake: {
+        Args: { _counted: number; _product: string; _wh: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
