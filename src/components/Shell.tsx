@@ -6,19 +6,24 @@ import { useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 
 export function CurrencySwitch({ size = "sm" }: { size?: "sm" | "md" }) {
-  const { currency, setCurrency } = useStore();
+  const { currency, setCurrency, settings } = useStore();
+  const n = (v: number) => v.toLocaleString("en-US");
+  const rate = currency === "USD" ? `1 $ = ${n(settings.yer_per_usd)} ر.ي` : `1 ر.س = ${n(settings.yer_per_sar)} ر.ي`;
   return (
-    <select
-      aria-label="تغيير العملة"
-      value={currency}
-      onChange={(e) => setCurrency(e.target.value as typeof currency)}
-      onClick={(e) => e.stopPropagation()}
-      className={`rounded-md border border-primary/40 bg-card font-bold text-primary outline-none focus:border-primary ${size === "md" ? "px-2 py-1 text-sm" : "px-1 py-0.5 text-[10px]"}`}
-    >
-      <option value="YER">YER</option>
-      <option value="SAR">SAR</option>
-      <option value="USD">USD</option>
-    </select>
+    <span className="inline-flex flex-col items-center gap-0.5">
+      <select
+        aria-label="تغيير العملة"
+        value={currency}
+        onChange={(e) => setCurrency(e.target.value as typeof currency)}
+        onClick={(e) => e.stopPropagation()}
+        className={`rounded-md border border-primary/40 bg-card font-bold text-primary outline-none focus:border-primary ${size === "md" ? "px-2 py-1 text-sm" : "px-1 py-0.5 text-[10px]"}`}
+      >
+        <option value="YER">YER</option>
+        <option value="SAR">SAR</option>
+        <option value="USD">USD</option>
+      </select>
+      <span dir="rtl" className={`whitespace-nowrap text-muted-foreground ${size === "md" ? "text-xs" : "text-[9px]"}`}>{rate}</span>
+    </span>
   );
 }
 
