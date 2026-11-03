@@ -24,7 +24,6 @@ function Index() {
   const list = tab === "top" ? [...products].sort((a, b) => b.reviews - a.reviews) : [...products].reverse();
   return (
     <Page>
-      <PromoSlider />
       <section className="mx-auto mb-6 w-full max-w-xs overflow-hidden rounded-3xl border border-primary/30">
         <img src={identityBeige.url} alt="هوية جود" className="block aspect-square w-full object-cover dark:hidden" />
         <img src={identityBlack.url} alt="هوية جود" className="hidden aspect-square w-full object-cover dark:block" />
@@ -50,6 +49,7 @@ function Index() {
           <div className="font-display font-bold tracking-wider text-primary">{DISCOUNT_CODE}</div>
         </div>
       </section>
+      <div className="mt-6"><PromoSlider /></div>
 
       <section className="mt-8">
         <div className="mb-3 flex items-center justify-between">
