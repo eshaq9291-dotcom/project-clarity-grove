@@ -1,3 +1,5 @@
+import identityBeige from "@/assets/jood-identity-beige.png.asset.json";
+import identityBlack from "@/assets/jood-identity-black.png.asset.json";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, Gem, Gift, ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
