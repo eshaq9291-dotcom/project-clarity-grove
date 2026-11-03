@@ -39,6 +39,21 @@ export type Product = {
   description: string;
 };
 
+// Hex swatch for each color name used in the catalog (for the circle picker).
+export const COLOR_HEX: Record<string, string> = {
+  "كحلي ملكي": "#1B2A4A",
+  "أسود عتيق": "#141414",
+  "عاجي فضي": "#E8E4DA",
+  "ذهبي": "#D4AF37",
+  "أسود": "#0A0A0A",
+  "عاجي": "#F2EBDD",
+  "بني": "#5C3A21",
+  "فضي": "#C0C0C0",
+  "دافئ": "#C98A5B",
+  "محايد": "#A08C7A",
+  "لؤلؤي": "#EFEAE0",
+};
+
 export const products: Product[] = [
   {
     id: "JD-9801", name: "شال كشميري مطرز ملكي بخيوط الذهب", details: "رجالي فاخر • صوف نقي 100%",

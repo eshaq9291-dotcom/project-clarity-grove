@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { BadgeCheck, Heart, ShoppingBag, Star, Wallet } from "lucide-react";
 import { useState } from "react";
 import { Page } from "@/components/Shell";
-import { getProduct } from "@/lib/products";
+import { COLOR_HEX, getProduct } from "@/lib/products";
 import { useStore } from "@/lib/store";
 import { useProductImages } from "@/lib/product-images";
 
@@ -71,10 +71,13 @@ function ProductPage() {
       <div className="mt-4 flex items-center gap-2 rounded-xl border bg-card p-3 text-sm">
         <Wallet className="size-5 text-primary" /> قسّمها على 4 دفعات بدون فوائد بقيمة {format(p.price / 4)} شهرياً
       </div>
-      <h2 className="mt-5 font-semibold">اللون</h2>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <h2 className="mt-5 font-semibold">اللون: <span className="text-primary">{color}</span></h2>
+      <div className="mt-3 flex flex-wrap items-center gap-3">
         {p.colors.map((c) => (
-          <button key={c} onClick={() => { setColor(c); setIdx(0); }} className={`rounded-full border px-4 py-1.5 text-sm ${color === c ? "border-primary bg-accent text-accent-foreground" : ""}`}>{c}</button>
+          <button key={c} onClick={() => { setColor(c); setIdx(0); }} aria-label={`اللون ${c}`} title={c}
+            className={`grid size-10 place-items-center rounded-full border-2 transition ${color === c ? "border-primary ring-2 ring-primary/40" : "border-border"}`}>
+            <span className="size-7 rounded-full border border-black/10" style={{ backgroundColor: COLOR_HEX[c] ?? "#888" }} />
+          </button>
         ))}
       </div>
       <h2 className="mt-5 font-semibold">المقاس / الأبعاد</h2>
