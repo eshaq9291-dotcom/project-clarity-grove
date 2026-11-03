@@ -42,12 +42,12 @@ export function PromoSlider() {
       <div ref={ref} className="overflow-hidden rounded-2xl">
         <div className="flex">
           {slides.map((s) => (
-            <div key={s.title} className="h-[280px] min-w-0 shrink-0 grow-0 basis-full ps-0 md:h-[450px] md:basis-1/3 md:px-1.5">
+            <div key={s.title} className="h-[200px] min-w-0 shrink-0 grow-0 basis-full ps-0 md:h-[300px] md:basis-1/3 md:px-1.5">
               <div className="relative h-full overflow-hidden rounded-2xl border border-primary/30">
                 <img src={s.image} alt={s.title} className="absolute inset-0 size-full object-cover" draggable={false} />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
-                  <h3 className="font-display text-2xl font-bold text-primary">{s.title}</h3>
+                  <h3 className="font-display text-xl font-bold text-primary">{s.title}</h3>
                   <p className="mt-1 text-sm font-semibold text-foreground">{s.text}</p>
                   <Link to="/categories" search={s.c ? { c: s.c } : {}} className="mt-3 inline-block rounded-lg bg-gold px-5 py-2 text-sm font-bold text-primary-foreground shadow-gold">
                     تسوق الآن
