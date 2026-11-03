@@ -9,7 +9,7 @@ export const Route = createFileRoute("/categories")({
     categories.some((x) => x.id === s["c"]) ? { c: s["c"] as CategoryId } : {},
   head: () => ({
     meta: [
-      { title: "الأقسام والمجموعات | جود كوتور" },
+      { title: "الأقسام والمجموعات | جود | JOOD" },
       { name: "description", content: "تصفح شيلان جود الفاخرة والحقائب وأحذية السهرة ومستحضرات التجميل." },
       { property: "og:title", content: "الأقسام والمجموعات الملكية | جود" },
       { property: "og:description", content: "استكشف إبداعات دار جود." },

@@ -10,3 +10,11 @@ describe("pricing rules", () => {
     expect(1875 * currencies.USD.rate).toBeCloseTo(500);
   });
 });
+
+import { sanaaZones, yerToSar } from "@/lib/products";
+describe("Sanaa shipping", () => {
+  it("converts YER fee to SAR at 140", () => {
+    expect(yerToSar(1400)).toBe(10);
+    expect(sanaaZones.length).toBeGreaterThan(0);
+  });
+});

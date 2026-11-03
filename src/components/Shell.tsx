@@ -1,26 +1,47 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, Home, LayoutGrid, ShoppingBag, Star } from "lucide-react";
+import { Heart, Home, LayoutGrid, Moon, ShoppingBag, Star, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
 import { logoUrl, type Product } from "@/lib/products";
 import { useStore } from "@/lib/store";
+
+function ThemeToggle() {
+  const [dark, setDark] = useState(true);
+  useEffect(() => {
+    const saved = localStorage.getItem("jood-theme");
+    if (saved) setDark(saved === "dark");
+  }, []);
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", dark);
+    localStorage.setItem("jood-theme", dark ? "dark" : "light");
+  }, [dark]);
+  return (
+    <button onClick={() => setDark(!dark)} aria-label={dark ? "الوضع الفاتح" : "الوضع الداكن"} className="rounded-full p-2 text-primary">
+      {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
+    </button>
+  );
+}
 
 export function Header() {
   const { cart } = useStore();
   const count = cart.reduce((s, i) => s + i.qty, 0);
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-surface/90 px-4 py-3 backdrop-blur">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-surface/90 px-4 py-2 backdrop-blur">
       <Link to="/" className="flex items-center gap-2">
-        <img src={logoUrl} alt="جود" className="size-9 rounded-full border border-primary/50 object-cover" />
+        <img src={logoUrl} alt="جود" className="size-12 object-contain" />
         <div className="leading-tight">
-          <div className="font-bold text-primary">جود</div>
-          <div className="font-display text-[10px] tracking-[0.25em] text-muted-foreground">JOOD COUTURE</div>
+          <div className="font-bold text-primary">جود | JOOD</div>
+          <div className="text-[10px] text-muted-foreground">لأن أناقتكم لا تقبل إلا الأفضل</div>
         </div>
       </Link>
-      <Link to="/cart" className="relative rounded-full p-2 text-primary" aria-label="الحقيبة">
-        <ShoppingBag className="size-6" />
-        {count > 0 && (
-          <span className="absolute -top-0.5 -left-0.5 grid size-5 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">{count}</span>
-        )}
-      </Link>
+      <div className="flex items-center">
+        <ThemeToggle />
+        <Link to="/cart" className="relative rounded-full p-2 text-primary" aria-label="الحقيبة">
+          <ShoppingBag className="size-6" />
+          {count > 0 && (
+            <span className="absolute -top-0.5 -left-0.5 grid size-5 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">{count}</span>
+          )}
+        </Link>
+      </div>
     </header>
   );
 }

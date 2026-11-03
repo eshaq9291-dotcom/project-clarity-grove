@@ -13,9 +13,9 @@ export const Route = createFileRoute("/product/$id")({
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: loaderData ? `${loaderData.name} | جود كوتور` : "قطعة غير متوفرة | جود" },
+      { title: loaderData ? `${loaderData.name} | جود | JOOD` : "قطعة غير متوفرة | جود" },
       { name: "description", content: loaderData?.description ?? "" },
-      { property: "og:title", content: loaderData?.name ?? "جود كوتور" },
+      { property: "og:title", content: loaderData?.name ?? "جود | JOOD" },
       { property: "og:description", content: loaderData?.description ?? "" },
     ],
   }),

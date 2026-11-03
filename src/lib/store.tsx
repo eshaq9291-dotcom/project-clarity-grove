@@ -21,7 +21,7 @@ const KEY = "jood-store";
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [currency, setCurrency] = useState<Currency>("SAR");
+  const [currency, setCurrency] = useState<Currency>("YER");
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {

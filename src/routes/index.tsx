@@ -7,9 +7,9 @@ import { categories, DISCOUNT_CODE, logoUrl, products } from "@/lib/products";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "جود كوتور | شيلان وحقائب ومكياج فاخر" },
+      { title: "جود | JOOD | شيلان وحقائب ومكياج فاخر" },
       { name: "description", content: "متجر جود: شيلان رجالية ونسائية فاخرة، حقائب راقية، صنادل كعب ومستحضرات تجميل." },
-      { property: "og:title", content: "جود كوتور | أناقة لا تقبل إلا بالأفضل" },
+      { property: "og:title", content: "جود | JOOD | أناقة لا تقبل إلا بالأفضل" },
       { property: "og:description", content: "شيلان فاخرة وحقائب راقية وصنادل سهرة ومكياج فاخر." },
     ],
   }),
@@ -22,9 +22,9 @@ function Index() {
   return (
     <Page>
       <section className="text-center">
-        <img src={logoUrl} alt="شعار جود" className="mx-auto size-36 rounded-2xl border border-primary/50 object-cover shadow-gold" />
-        <h1 className="mt-4 font-display text-3xl font-bold text-primary">JOOD | جود</h1>
-        <p className="mt-2 text-lg font-semibold">لأن أناقتكم لا تقبل إلا بالأفضل</p>
+        <img src={logoUrl} alt="شعار جود" className="mx-auto size-40 object-contain drop-shadow-[0_8px_24px_var(--primary)]" />
+        <h1 className="mt-4 font-display text-3xl font-bold text-primary">جود | JOOD</h1>
+        <p className="mt-2 text-lg font-semibold">لأن أناقتكم لا تقبل إلا الأفضل</p>
         <p className="mt-2 text-sm text-muted-foreground">شيلان رجالية ونسائية فاخرة | حقائب نسائية راقية | صنادل كعب مميزة | أرقى خيارات الـ Makeup</p>
         <Link to="/categories" className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-gold py-3.5 font-bold text-primary-foreground shadow-gold">
           اكتشف التشكيلة الجديدة <ArrowLeft className="size-4" />

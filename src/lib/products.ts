@@ -1,4 +1,4 @@
-import logo from "@/assets/logo.jpg.asset.json";
+import logo from "@/assets/jood-logo-gold.png";
 import catMen from "@/assets/cat-men.jpg.asset.json";
 import catWomen from "@/assets/cat-women.jpg.asset.json";
 import catBags from "@/assets/cat-bags.jpg.asset.json";
@@ -11,7 +11,7 @@ import pHeels from "@/assets/p-heels.jpg.asset.json";
 import pMakeup from "@/assets/p-makeup.jpg.asset.json";
 import pClutch from "@/assets/p-clutch.jpg.asset.json";
 
-export const logoUrl = logo.url;
+export const logoUrl = logo;
 
 export type CategoryId = "men-shawls" | "women-shawls" | "bags" | "heels" | "makeup";
 
@@ -89,3 +89,25 @@ export type Currency = keyof typeof currencies;
 
 export const DISCOUNT_CODE = "JOOD2024";
 export const DISCOUNT_RATE = 0.25;
+
+/** Delivery fees inside Sana'a, in Yemeni riyals. */
+export const sanaaZones: { id: string; name: string; feeYER: number }[] = [
+  { id: "tahrir", name: "التحرير", feeYER: 1000 },
+  { id: "sabeen", name: "السبعين", feeYER: 1500 },
+  { id: "maeen", name: "معين", feeYER: 1500 },
+  { id: "wahda", name: "الوحدة", feeYER: 1500 },
+  { id: "shuub", name: "شعوب", feeYER: 1500 },
+  { id: "safiya", name: "الصافية", feeYER: 1500 },
+  { id: "thawra", name: "الثورة", feeYER: 2000 },
+  { id: "azal", name: "آزال", feeYER: 2000 },
+  { id: "bani-alharith", name: "بني الحارث", feeYER: 2500 },
+];
+/** Converts a YER amount to the SAR base used for all prices. */
+export const yerToSar = (yer: number) => yer / currencies.YER.rate;
+
+export const wallets = [
+  { id: "kuraimi", name: "الكريمي جوال", account: "000000000" },
+  { id: "jaib", name: "جيب", account: "000000000" },
+  { id: "onecash", name: "ون كاش", account: "000000000" },
+  { id: "floosak", name: "فلوسك", account: "000000000" },
+];

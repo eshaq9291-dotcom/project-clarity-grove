@@ -8,7 +8,7 @@ import { useStore } from "@/lib/store";
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "الحقيبة الملكية | جود كوتور" },
+      { title: "الحقيبة الملكية | جود | JOOD" },
       { name: "description", content: "راجع مقتنياتك وأتمم طلبك من جود." },
       { property: "og:title", content: "الحقيبة الملكية | جود" },
       { property: "og:description", content: "راجع مقتنياتك الفاخرة." },
@@ -82,7 +82,7 @@ function Cart() {
       <div className="mt-4 space-y-2 rounded-xl border bg-card p-4 text-sm">
         <Row l="المجموع الفرعي" v={format(subtotal)} />
         {discount > 0 && <Row l={`خصم ${DISCOUNT_CODE}`} v={`- ${format(discount)}`} />}
-        <Row l="الشحن الخاص" v="مجاني" />
+        <Row l="التوصيل" v="يُحسب حسب منطقتك في صنعاء" />
         <div className="border-t pt-2"><Row l="الإجمالي" v={format(total)} bold /></div>
       </div>
       <Link to="/checkout" search={{ code }} className="mt-5 block rounded-xl bg-gold py-3.5 text-center font-bold text-primary-foreground shadow-gold">إتمام الطلب الملكي</Link>
