@@ -1,0 +1,84 @@
+import { Link } from "@tanstack/react-router";
+import { Heart, Home, LayoutGrid, ShoppingBag, Star } from "lucide-react";
+import { logoUrl, type Product } from "@/lib/products";
+import { useStore } from "@/lib/store";
+
+export function Header() {
+  const { cart } = useStore();
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  return (
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-surface/90 px-4 py-3 backdrop-blur">
+      <Link to="/" className="flex items-center gap-2">
+        <img src={logoUrl} alt="جود" className="size-9 rounded-full border border-primary/50 object-cover" />
+        <div className="leading-tight">
+          <div className="font-bold text-primary">جود</div>
+          <div className="font-display text-[10px] tracking-[0.25em] text-muted-foreground">JOOD COUTURE</div>
+        </div>
+      </Link>
+      <Link to="/cart" className="relative rounded-full p-2 text-primary" aria-label="الحقيبة">
+        <ShoppingBag className="size-6" />
+        {count > 0 && (
+          <span className="absolute -top-0.5 -left-0.5 grid size-5 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">{count}</span>
+        )}
+      </Link>
+    </header>
+  );
+}
+
+export function BottomNav() {
+  const items = [
+    { to: "/", label: "الرئيسية", icon: Home },
+    { to: "/categories", label: "الأقسام", icon: LayoutGrid },
+    { to: "/wishlist", label: "رغباتي", icon: Heart },
+    { to: "/cart", label: "الحقيبة", icon: ShoppingBag },
+  ] as const;
+  return (
+    <nav className="fixed inset-x-0 bottom-0 z-30 border-t bg-surface/95 backdrop-blur">
+      <div className="mx-auto grid max-w-3xl grid-cols-4">
+        {items.map(({ to, label, icon: Icon }) => (
+          <Link key={to} to={to} activeOptions={{ exact: to === "/" }}
+            className="flex flex-col items-center gap-1 py-2.5 text-xs text-muted-foreground"
+            activeProps={{ className: "text-primary" }}>
+            <Icon className="size-5" />
+            {label}
+          </Link>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+export function ProductCard({ p }: { p: Product }) {
+  const { format, add, toggleWish, wishlist } = useStore();
+  const wished = wishlist.includes(p.id);
+  return (
+    <div className="overflow-hidden rounded-xl border bg-card">
+      <div className="relative">
+        <Link to="/product/$id" params={{ id: p.id }}>
+          <img src={p.image} alt={p.name} className="aspect-[4/5] w-full object-cover" loading="lazy" />
+        </Link>
+        {p.badge && <span className="absolute top-2 right-2 rounded bg-gold px-2 py-0.5 text-[10px] font-bold text-primary-foreground">{p.badge}</span>}
+        <button onClick={() => toggleWish(p.id)} aria-label="المفضلة" className="absolute top-2 left-2 grid size-8 place-items-center rounded-full bg-surface/70 text-primary">
+          <Heart className={`size-4 ${wished ? "fill-primary" : ""}`} />
+        </button>
+      </div>
+      <div className="space-y-1 p-3">
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <Star className="size-3 fill-primary text-primary" /> {p.rating.toFixed(1)} ({p.reviews})
+        </div>
+        <Link to="/product/$id" params={{ id: p.id }} className="line-clamp-1 text-sm font-semibold">{p.name}</Link>
+        <p className="line-clamp-1 text-xs text-muted-foreground">{p.details}</p>
+        <div className="flex items-center justify-between pt-2">
+          <span className="font-bold text-primary">{format(p.price)}</span>
+          <button onClick={() => add(p.id)} aria-label="أضف للحقيبة" className="grid size-8 place-items-center rounded-md bg-gold text-primary-foreground">
+            <ShoppingBag className="size-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Page({ children }: { children: React.ReactNode }) {
+  return <main className="mx-auto max-w-3xl px-4 pt-5 pb-28">{children}</main>;
+}
