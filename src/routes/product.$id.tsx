@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { BadgeCheck, Heart, ShoppingBag, Star, Wallet } from "lucide-react";
 import { useState } from "react";
-import { Page } from "@/components/Shell";
+import { CurrencySwitch, Page } from "@/components/Shell";
 import { COLOR_HEX, getProduct } from "@/lib/products";
 import { useStore } from "@/lib/store";
 import { useProductImages } from "@/lib/product-images";
@@ -68,6 +68,7 @@ function ProductPage() {
       <div className="mt-3 flex items-baseline gap-3">
         <span className="text-2xl font-bold text-primary">{format(p.price)}</span>
         {p.oldPrice && <span className="text-muted-foreground line-through">{format(p.oldPrice)}</span>}
+        <span className="self-center"><CurrencySwitch size="md" /></span>
       </div>
       <p className="text-xs text-muted-foreground">شامل ضريبة القيمة المضافة</p>
       <div className="mt-4 flex items-center gap-2 rounded-xl border bg-card p-3 text-sm">

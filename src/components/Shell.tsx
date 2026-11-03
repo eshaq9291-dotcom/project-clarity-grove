@@ -5,6 +5,23 @@ import { logoUrl, type Product } from "@/lib/products";
 import { useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 
+export function CurrencySwitch({ size = "sm" }: { size?: "sm" | "md" }) {
+  const { currency, setCurrency } = useStore();
+  return (
+    <select
+      aria-label="تغيير العملة"
+      value={currency}
+      onChange={(e) => setCurrency(e.target.value as typeof currency)}
+      onClick={(e) => e.stopPropagation()}
+      className={`rounded-md border border-primary/40 bg-card font-bold text-primary outline-none focus:border-primary ${size === "md" ? "px-2 py-1 text-sm" : "px-1 py-0.5 text-[10px]"}`}
+    >
+      <option value="YER">YER</option>
+      <option value="SAR">SAR</option>
+      <option value="USD">USD</option>
+    </select>
+  );
+}
+
 function ThemeToggle() {
   const [dark, setDark] = useState(true);
   useEffect(() => {
@@ -90,7 +107,7 @@ export function ProductCard({ p }: { p: Product }) {
         <Link to="/product/$id" params={{ id: p.id }} className="line-clamp-1 text-sm font-semibold">{p.name}</Link>
         <p className="line-clamp-1 text-xs text-muted-foreground">{p.details}</p>
         <div className="flex items-center justify-between pt-2">
-          <span className="font-bold text-primary">{format(p.price)}</span>
+          <span className="flex items-center gap-1.5"><span className="font-bold text-primary">{format(p.price)}</span><CurrencySwitch /></span>
           <button onClick={() => add(p.id)} aria-label="أضف للحقيبة" className="grid size-8 place-items-center rounded-md bg-gold text-primary-foreground">
             <ShoppingBag className="size-4" />
           </button>
