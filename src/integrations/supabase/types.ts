@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_login_attempts: {
+        Row: {
+          attempts: number
+          key: string
+          last_attempt: string
+          locked_until: string | null
+        }
+        Insert: {
+          attempts?: number
+          key: string
+          last_attempt?: string
+          locked_until?: string | null
+        }
+        Update: {
+          attempts?: number
+          key?: string
+          last_attempt?: string
+          locked_until?: string | null
+        }
+        Relationships: []
+      }
+      admin_sessions: {
+        Row: {
+          expires_at: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          expires_at: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          expires_at?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           created_at: string
@@ -95,6 +134,7 @@ export type Database = {
           subtotal_sar: number
           total_sar: number
           total_yer: number
+          user_id: string | null
           wallet: string | null
           zone: string
         }
@@ -124,6 +164,7 @@ export type Database = {
           subtotal_sar: number
           total_sar: number
           total_yer: number
+          user_id?: string | null
           wallet?: string | null
           zone: string
         }
@@ -153,6 +194,7 @@ export type Database = {
           subtotal_sar?: number
           total_sar?: number
           total_yer?: number
+          user_id?: string | null
           wallet?: string | null
           zone?: string
         }
@@ -209,6 +251,66 @@ export type Database = {
           path?: string
           product_id?: string
           sort?: number
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          active: boolean
+          category: string
+          compare_at_yer: number | null
+          created_at: string
+          data: Json
+          featured: boolean
+          id: string
+          name: string
+          price_yer: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category: string
+          compare_at_yer?: number | null
+          created_at?: string
+          data?: Json
+          featured?: boolean
+          id: string
+          name: string
+          price_yer: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          compare_at_yer?: number | null
+          created_at?: string
+          data?: Json
+          featured?: boolean
+          id?: string
+          name?: string
+          price_yer?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_path: string | null
+          created_at: string
+          display_name: string
+          id: string
+        }
+        Insert: {
+          avatar_path?: string | null
+          created_at?: string
+          display_name?: string
+          id: string
+        }
+        Update: {
+          avatar_path?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
         }
         Relationships: []
       }
@@ -499,6 +601,7 @@ export type Database = {
         Args: { _counted: number; _product: string; _wh: string }
         Returns: undefined
       }
+      has_admin_access: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -506,6 +609,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      reserve_admin_attempt: { Args: { _key: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
