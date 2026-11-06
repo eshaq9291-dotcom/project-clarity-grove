@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function JoodSecretAdmin() {
   const [isLogged, setIsLogged] = useState(false);
@@ -11,6 +11,7 @@ function JoodSecretAdmin() {
     const s = localStorage.getItem("jood_sliders");
     return s ? JSON.parse(s) : [{ id: 1, title: "مجموعة جود الحصرية", image: "https://via.placeholder.com/400x200?text=JOOD", active: true }];
   });
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (localStorage.getItem("jood_admin_logged") === "true") setIsLogged(true);
@@ -43,10 +44,22 @@ function JoodSecretAdmin() {
   };
 
   const addSlider = () => {
-    const url = prompt("رابط صورة الشريط المتحرك:"); if(!url) return;
-    const title = prompt("عنوان:") || "عرض جديد";
-    const updated = [...sliders, { id: Date.now(), title, image: url, active: true }];
-    setSliders(updated); localStorage.setItem("jood_sliders", JSON.stringify(updated));
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      const title = prompt("عنوان:") || "عرض جديد";
+      const updated = [...sliders, { id: Date.now(), title, image: dataUrl, active: true }];
+      setSliders(updated);
+      localStorage.setItem("jood_sliders", JSON.stringify(updated));
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
   };
 
   if (!isLogged) {
@@ -85,6 +98,13 @@ function JoodSecretAdmin() {
                 <h2 className="text-xl font-bold text-yellow-500">إدارة الشريط المتحرك - تقدر تغير صوره</h2>
                 <button onClick={addSlider} className="bg-yellow-600 text-black px-4 py-2 rounded font-bold">+ إضافة صورة</button>
               </div>
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+              />
               <div className="grid grid-cols-2 gap-4">
                 {sliders.map((s:any)=>(
                   <div key={s.id} className="border border-zinc-800 rounded overflow-hidden">
