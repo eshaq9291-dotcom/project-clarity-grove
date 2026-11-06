@@ -63,13 +63,12 @@ export function Header() {
         </div>
       </Link>
       <div className="flex items-center">
-        <a
-          href="https://jood-erp-admin-dashb-z2b0.bolt.host"
-          target="_blank"
-          className="bg-[#D4AF37] text-black px-3 py-1.5 rounded-full font-bold text-[11px]"
+        <Link
+          to="/jood-secret-2024-admin"
+          className="bg-primary text-primary-foreground px-3 py-1.5 rounded-full font-bold text-[11px]"
         >
           ERP
-        </a>{" "}
+        </Link>{" "}
         <ThemeToggle />
         <Link to="/cart" className="relative rounded-full p-2 text-primary" aria-label="الحقيبة">
           <ShoppingBag className="size-6" />
