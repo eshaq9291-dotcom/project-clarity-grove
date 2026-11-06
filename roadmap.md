@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Current scope only: seed one Test Sandal (15000 YER, stock 10, Black, EU 38); verify existing admin add/edit/delete and storefront visibility without redesign. Earlier expansion deferred by user.
+
 - [ ] Customer sign-in, profiles, own orders and account menu
 - [ ] Hidden admin entry, five-attempt lock and two-hour access; remove public ERP link
 - [ ] Saved products, category-specific editor, photos and variant stock
