@@ -10,23 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as JoodSecret2024AdminRouteImport } from './routes/jood-secret-2024-admin'
 import { Route as WishlistRouteImport } from './routes/wishlist'
-import { Route as AdminDashboardRouteImport } from './routes/admin_.dashboard'
 import { Route as ProductIdRouteImport } from './routes/product.$id'
-import { Route as AdminErpModuleRouteImport } from './routes/admin_.erp.$module'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CartRoute = CartRouteImport.update({
@@ -44,14 +37,14 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JoodSecret2024AdminRoute = JoodSecret2024AdminRouteImport.update({
+  id: '/jood-secret-2024-admin',
+  path: '/jood-secret-2024-admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminDashboardRoute = AdminDashboardRouteImport.update({
-  id: '/admin_/dashboard',
-  path: '/admin/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductIdRoute = ProductIdRouteImport.update({
@@ -59,92 +52,73 @@ const ProductIdRoute = ProductIdRouteImport.update({
   path: '/product/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminErpModuleRoute = AdminErpModuleRouteImport.update({
-  id: '/admin_/erp/$module',
-  path: '/admin/erp/$module',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
+  '/jood-secret-2024-admin': typeof JoodSecret2024AdminRoute
   '/wishlist': typeof WishlistRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
   '/product/$id': typeof ProductIdRoute
-  '/admin/erp/$module': typeof AdminErpModuleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
+  '/jood-secret-2024-admin': typeof JoodSecret2024AdminRoute
   '/wishlist': typeof WishlistRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
   '/product/$id': typeof ProductIdRoute
-  '/admin/erp/$module': typeof AdminErpModuleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/cart': typeof CartRoute
   '/categories': typeof CategoriesRoute
   '/checkout': typeof CheckoutRoute
+  '/jood-secret-2024-admin': typeof JoodSecret2024AdminRoute
   '/wishlist': typeof WishlistRoute
-  '/admin_/dashboard': typeof AdminDashboardRoute
   '/product/$id': typeof ProductIdRoute
-  '/admin_/erp/$module': typeof AdminErpModuleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/jood-secret-2024-admin'
     | '/wishlist'
-    | '/admin/dashboard'
     | '/product/$id'
-    | '/admin/erp/$module'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/jood-secret-2024-admin'
     | '/wishlist'
-    | '/admin/dashboard'
     | '/product/$id'
-    | '/admin/erp/$module'
   id:
     | '__root__'
     | '/'
-    | '/admin'
     | '/cart'
     | '/categories'
     | '/checkout'
+    | '/jood-secret-2024-admin'
     | '/wishlist'
-    | '/admin_/dashboard'
     | '/product/$id'
-    | '/admin_/erp/$module'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
   CartRoute: typeof CartRoute
   CategoriesRoute: typeof CategoriesRoute
   CheckoutRoute: typeof CheckoutRoute
+  JoodSecret2024AdminRoute: typeof JoodSecret2024AdminRoute
   WishlistRoute: typeof WishlistRoute
-  AdminDashboardRoute: typeof AdminDashboardRoute
   ProductIdRoute: typeof ProductIdRoute
-  AdminErpModuleRoute: typeof AdminErpModuleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -154,13 +128,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -184,18 +151,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jood-secret-2024-admin': {
+      id: '/jood-secret-2024-admin'
+      path: '/jood-secret-2024-admin'
+      fullPath: '/jood-secret-2024-admin'
+      preLoaderRoute: typeof JoodSecret2024AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wishlist': {
       id: '/wishlist'
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin_/dashboard': {
-      id: '/admin_/dashboard'
-      path: '/admin/dashboard'
-      fullPath: '/admin/dashboard'
-      preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/product/$id': {
@@ -205,26 +172,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin_/erp/$module': {
-      id: '/admin_/erp/$module'
-      path: '/admin/erp/$module'
-      fullPath: '/admin/erp/$module'
-      preLoaderRoute: typeof AdminErpModuleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
   CartRoute: CartRoute,
   CategoriesRoute: CategoriesRoute,
   CheckoutRoute: CheckoutRoute,
+  JoodSecret2024AdminRoute: JoodSecret2024AdminRoute,
   WishlistRoute: WishlistRoute,
-  AdminDashboardRoute: AdminDashboardRoute,
   ProductIdRoute: ProductIdRoute,
-  AdminErpModuleRoute: AdminErpModuleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
