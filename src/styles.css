@@ -100,6 +100,17 @@
 @utility shadow-gold { box-shadow: var(--shadow-gold); }
 @utility font-display { font-family: var(--font-display); }
 @utility no-scrollbar { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+@utility form-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid oklch(0.5 0 0 / 40%);
+  background: oklch(0.1 0 0);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  color: oklch(0.96 0.013 88);
+  outline: none;
+  &:focus { border-color: oklch(0.76 0.13 88); }
+}
 
 @media print {
   body * { visibility: hidden; }
