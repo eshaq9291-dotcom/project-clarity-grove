@@ -1,5 +1,11 @@
 # Roadmap
 
+- [x] Add/Edit/Delete controls connected to existing products table and transactional main-warehouse stock; ERP link now internal. Existing black/gold layout and Test Sandal retained.
+- [ ] Authenticated product CRUD verification: awaiting owner signup/email confirmation; no auth users exist. Internal ERP navigation verified, no runtime errors, build OK.
+
+- [x] Seed exactly one Test Sandal: 15000 YER, stock 10, Black, EU 38; saved row and warehouse quantity verified.
+- [ ] Storefront visibility deferred: store still uses static products; latest request limits changes to admin controls.
+
 - [ ] Customer sign-in, profiles, own orders and account menu
 - [ ] Hidden admin entry, five-attempt lock and two-hour access; remove public ERP link
 - [ ] Saved products, category-specific editor, photos and variant stock

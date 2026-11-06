@@ -608,6 +608,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_jood_owner: { Args: never; Returns: boolean }
+      delete_admin_product: { Args: { _id: string }; Returns: undefined }
       erp_move_stock: {
         Args: {
           _delta: number
