@@ -10,7 +10,7 @@ export function AdminGate({ children }: { children: ReactNode }) {
     const check = async () => {
       const { data } = await supabase.auth.getUser();
       if (!data.user) return setState("out");
-      const { data: ok } = await supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" });
+      const { data: ok } = await supabase.rpc("has_admin_access");
       setState(ok ? "ok" : "denied");
     };
     check();
@@ -24,7 +24,7 @@ export function AdminGate({ children }: { children: ReactNode }) {
         {state === "loading" ? <p className="text-muted-foreground">...</p> : (
           <>
             <p className="font-bold">{state === "out" ? "سجّل الدخول كصاحب المتجر أولاً" : "هذا الحساب لا يملك صلاحية الإدارة"}</p>
-            <Link to="/admin" className="mt-4 inline-block rounded-xl bg-gold px-6 py-3 font-bold text-primary-foreground">صفحة الدخول</Link>
+            <Link to="/jood-secret-2024-admin" className="mt-4 inline-block rounded-xl bg-gold px-6 py-3 font-bold text-primary-foreground">صفحة الدخول</Link>
           </>
         )}
       </div>
