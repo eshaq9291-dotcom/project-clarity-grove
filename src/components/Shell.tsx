@@ -1,9 +1,10 @@
 import { Link, useCanGoBack, useRouter, useRouterState } from "@tanstack/react-router";
-import { ArrowRight, Heart, Home, LayoutGrid, Moon, ShoppingBag, Star, Sun } from "lucide-react";
+import { ArrowRight, Heart, Home, LayoutGrid, Moon, ShoppingBag, Star, Sun, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { logoUrl, type Product } from "@/lib/products";
 import { useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import { CustomerAuthModal } from "@/components/CustomerAuthModal";
 
 export function CurrencySwitch({ size = "sm" }: { size?: "sm" | "md" }) {
   const { currency, setCurrency, settings } = useStore();
@@ -53,34 +54,45 @@ function ThemeToggle() {
 export function Header() {
   const { cart } = useStore();
   const count = cart.reduce((s, i) => s + i.qty, 0);
+  const [authOpen, setAuthOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-surface/90 px-4 py-2 backdrop-blur">
-      <Link to="/" className="flex items-center gap-2">
-        <img src={logoUrl} alt="جود" className="size-12 object-contain" />
-        <div className="leading-tight">
-          <div className="font-bold text-primary">جود | JOOD</div>
-          <div className="text-[10px] text-muted-foreground">لأن أناقتكم لا تقبل إلا الأفضل</div>
-        </div>
-      </Link>
-      <div className="flex items-center">
-        <a
-          href="https://jood-erp-admin-dashb-z2b0.bolt.host"
-          target="_blank"
-          className="bg-[#D4AF37] text-black px-3 py-1.5 rounded-full font-bold text-[11px]"
-        >
-          ERP
-        </a>{" "}
-        <ThemeToggle />
-        <Link to="/cart" className="relative rounded-full p-2 text-primary" aria-label="الحقيبة">
-          <ShoppingBag className="size-6" />
-          {count > 0 && (
-            <span className="absolute -top-0.5 -left-0.5 grid size-5 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
-              {count}
-            </span>
-          )}
+    <>
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-surface/90 px-4 py-2 backdrop-blur">
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logoUrl} alt="جود" className="size-12 object-contain" />
+          <div className="leading-tight">
+            <div className="font-bold text-primary">جود | JOOD</div>
+            <div className="text-[10px] text-muted-foreground">لأن أناقتكم لا تقبل إلا الأفضل</div>
+          </div>
         </Link>
-      </div>
-    </header>
+        <div className="flex items-center">
+          <a
+            href="https://jood-erp-admin-dashb-z2b0.bolt.host"
+            target="_blank"
+            className="bg-[#D4AF37] text-black px-3 py-1.5 rounded-full font-bold text-[11px]"
+          >
+            ERP
+          </a>{" "}
+          <button
+            onClick={() => setAuthOpen(true)}
+            aria-label="حساب العميل"
+            className="rounded-full p-2 text-primary"
+          >
+            <User className="size-5" />
+          </button>
+          <ThemeToggle />
+          <Link to="/cart" className="relative rounded-full p-2 text-primary" aria-label="الحقيبة">
+            <ShoppingBag className="size-6" />
+            {count > 0 && (
+              <span className="absolute -top-0.5 -left-0.5 grid size-5 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
+                {count}
+              </span>
+            )}
+          </Link>
+        </div>
+      </header>
+      <CustomerAuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+    </>
   );
 }
 
