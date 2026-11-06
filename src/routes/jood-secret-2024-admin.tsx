@@ -1,46 +1,45 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect, useRef } from "react";
+import { supabase } from '@/integrations/supabase/client';
+import { AdminProducts } from '@/components/AdminProducts';
+import { Button } from '@/components/ui/button';
 
 function JoodSecretAdmin() {
   const [isLogged, setIsLogged] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState("sliders");
-  const [sliders, setSliders] = useState<any[]>(() => {
-    const s = localStorage.getItem("jood_sliders");
-    return s ? JSON.parse(s) : [{ id: 1, title: "مجموعة جود الحصرية", image: "https://via.placeholder.com/400x200?text=JOOD", active: true }];
-  });
+  const [sliders, setSliders] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (localStorage.getItem("jood_admin_logged") === "true") setIsLogged(true);
+    const saved = localStorage.getItem('jood_sliders');
+    if (saved) { try { setSliders(JSON.parse(saved)); } catch {} }
+    void supabase.auth.getUser().then(async ({ data }) => {
+      if (data.user) {
+        const r = await supabase.rpc('has_admin_access');
+        setIsLogged(r.data === true);
+      }
+    });
   }, []);
 
-  const handleLogin = () => {
-    const savedUser = localStorage.getItem("jood_admin_user") || "jood-4sh__o";
-    const savedPass = localStorage.getItem("jood_admin_pass");
-    if (!savedPass) {
-      if (username === "jood-4sh__o" && password.length >= 4) {
-        localStorage.setItem("jood_admin_user", "jood-4sh__o");
-        localStorage.setItem("jood_admin_pass", password);
-        localStorage.setItem("jood_admin_logged", "true");
-        setIsLogged(true);
-        alert("تم حفظ كلمة السر! أنت المدير الكامل jood-4sh__o");
-      } else alert("اسم المستخدم jood-4sh__o وكلمة السر 4 أحرف على الأقل");
-      return;
-    }
-    if (username === savedUser && password === savedPass) {
-      localStorage.setItem("jood_admin_logged", "true");
-      setIsLogged(true);
-    } else alert("خطأ! أنت المدير jood-4sh__o فقط");
+  const handleLogin = async () => {
+    if (username !== 'jood-4sh__o') { setMessage('تعذر الدخول'); return; }
+    const r = await supabase.auth.signInWithPassword({ email: 'eshaq9291@gmail.com', password });
+    if (r.error) { setMessage('تعذر الدخول. فعّل حساب المالك بالبريد أولاً.'); return; }
+    const access = await supabase.rpc('activate_jood_owner');
+    setPassword('');
+    if (access.error || !access.data) { setMessage('غير مصرح'); return; }
+    setIsLogged(true);
   };
 
-  const handleChangePassword = () => {
-    if (newPassword.length < 4) return alert("قصيرة");
-    localStorage.setItem("jood_admin_pass", newPassword);
-    alert("تم تغيير كلمة السر يا مدير jood-4sh__o");
-    setNewPassword("");
+  const handleChangePassword = async () => {
+    const r = await supabase.auth.updateUser({ password: newPassword, current_password: currentPassword });
+    setMessage(r.error ? r.error.message : 'تم تغيير كلمة السر');
+    setNewPassword(''); setCurrentPassword('');
   };
 
   const addSlider = () => {
@@ -68,10 +67,16 @@ function JoodSecretAdmin() {
         <div className="bg-zinc-900 border border-yellow-600/30 p-8 rounded-2xl w-full max-w-md">
           <h1 className="text-2xl font-bold text-yellow-500 text-center mb-2">JOOD | جود</h1>
           <p className="text-zinc-400 text-center mb-6 text-sm">المدير الكامل: jood-4sh__o</p>
-          {!localStorage.getItem("jood_admin_pass") && <p className="text-green-400 text-xs text-center mb-4">أول مرة؟ أدخل jood-4sh__o واختر كلمة سرك</p>}
+          <p className="text-zinc-400 text-xs text-center mb-4">الدخول بحساب المالك الموثّق</p>
           <input value={username} onChange={e=>setUsername(e.target.value)} placeholder="jood-4sh__o" className="w-full p-3 mb-3 bg-black border border-zinc-700 rounded text-white" />
           <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="كلمة السر" className="w-full p-3 mb-4 bg-black border border-zinc-700 rounded text-white" />
-          <button onClick={handleLogin} className="w-full bg-yellow-500 text-black font-bold p-3 rounded">دخول الإدارة</button>
+          <Button onClick={handleLogin} className="w-full">دخول الإدارة</Button>
+          <Button variant="outline" className="mt-3 w-full" onClick={async () => {
+            if (username !== 'jood-4sh__o' || password.length < 8) { setMessage('أدخل اسم المالك وكلمة مرور من 8 أحرف على الأقل'); return; }
+            const r = await supabase.auth.signUp({ email: 'eshaq9291@gmail.com', password, options: { emailRedirectTo: window.location.origin + '/jood-secret-2024-admin' } });
+            setMessage(r.error ? r.error.message : 'تحقق من بريد المالك لتأكيد الحساب، ثم سجّل الدخول.');
+          }}>تفعيل حساب المالك بالبريد</Button>
+          {message && <p role="status" className="mt-3 text-sm text-primary">{message}</p>}
         </div>
       </div>
     );
@@ -81,17 +86,18 @@ function JoodSecretAdmin() {
     <div className="min-h-screen bg-black text-white">
       <header className="border-b border-yellow-600/20 p-4 flex justify-between bg-zinc-900">
         <h1 className="text-yellow-500 font-bold">JOOD Admin - jood-4sh__o المدير الكامل</h1>
-        <button onClick={()=>{localStorage.removeItem("jood_admin_logged"); setIsLogged(false)}} className="text-sm border px-3 py-1 rounded">خروج</button>
+        <Button variant="outline" onClick={async ()=>{ await supabase.auth.signOut(); setIsLogged(false); }}>خروج</Button>
       </header>
       <div className="flex">
         <aside className="w-64 bg-zinc-900 min-h-screen p-4">
-          {["sliders","ledger","settings"].map(tab=>(
+          {["products","sliders","ledger","settings"].map(tab=>(
             <button key={tab} onClick={()=>setActiveTab(tab)} className={`w-full text-right p-3 mb-2 rounded ${activeTab===tab ? "bg-yellow-600/20 text-yellow-400 border border-yellow-600/30" : "text-zinc-400"}`}>
-              {tab==="sliders"?"🎞️ الشريط المتحرك - تغير الصور":tab==="ledger"?"📒 دفتر الأستاذ العام":"⚙️ تغيير كلمة السر"}
+              {tab==='products'?'إدارة المنتجات / ERP':tab==="sliders"?"🎞️ الشريط المتحرك - تغير الصور":tab==="ledger"?"📒 دفتر الأستاذ العام":"⚙️ تغيير كلمة السر"}
             </button>
           ))}
         </aside>
         <main className="flex-1 p-6">
+          {activeTab==='products' && <AdminProducts />}
           {activeTab==="sliders" && (
             <div>
               <div className="flex justify-between mb-6">
@@ -135,8 +141,10 @@ function JoodSecretAdmin() {
             <div className="max-w-md">
               <h2 className="text-xl font-bold text-yellow-500 mb-4">الإعدادات - jood-4sh__o</h2>
               <p className="text-sm text-zinc-400 mb-2">المدير الحالي: jood-4sh__o - تقدر تغير كلمة السر</p>
+              <input type="password" value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)} placeholder="كلمة السر الحالية" className="w-full p-3 mb-3 bg-zinc-900 border border-zinc-700 rounded" />
               <input type="password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="كلمة سر جديدة" className="w-full p-3 mb-3 bg-zinc-900 border border-zinc-700 rounded" />
               <button onClick={handleChangePassword} className="bg-yellow-600 text-black px-4 py-2 rounded font-bold w-full">تغيير كلمة السر</button>
+              {message && <p role="status" className="mt-3 text-primary">{message}</p>}
             </div>
           )}
         </main>
@@ -146,5 +154,6 @@ function JoodSecretAdmin() {
 }
 
 export const Route = createFileRoute('/jood-secret-2024-admin')({
+  head: () => ({ meta: [{ title: 'إدارة منتجات جود | JOOD' }, { name: 'description', content: 'إدارة منتجات جود الخاصة بالمالك.' }, { property: 'og:title', content: 'إدارة جود | JOOD' }, { property: 'og:description', content: 'لوحة إدارة المنتجات الخاصة.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary' }, { name: 'robots', content: 'noindex' }] }),
   component: JoodSecretAdmin,
 })

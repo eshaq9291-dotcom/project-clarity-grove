@@ -43,6 +43,13 @@
       "when": 1793829269757,
       "tag": "0005_jood_accounts_catalog_secure_admin",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793986896836,
+      "tag": "0006_owner_product_controls",
+      "breakpoints": true
     }
   ]
 }

@@ -587,6 +587,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_jood_owner: { Args: never; Returns: boolean }
+      delete_admin_product: { Args: { _id: string }; Returns: undefined }
       erp_move_stock: {
         Args: {
           _delta: number
@@ -610,6 +612,17 @@ export type Database = {
         Returns: boolean
       }
       reserve_admin_attempt: { Args: { _key: string }; Returns: boolean }
+      save_admin_product: {
+        Args: {
+          _category: string
+          _data: Json
+          _id: string
+          _name: string
+          _price: number
+          _stock: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "user"
