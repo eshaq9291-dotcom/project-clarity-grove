@@ -582,27 +582,6 @@ export type Database = {
         }
         Relationships: []
       }
-      jood_admin_sessions: {
-        Row: {
-          session_id: string
-          password_hash: string
-          created_at: string
-          expires_at: string
-        }
-        Insert: {
-          session_id?: string
-          password_hash: string
-          created_at?: string
-          expires_at?: string
-        }
-        Update: {
-          session_id?: string
-          password_hash?: string
-          created_at?: string
-          expires_at?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
@@ -633,38 +612,15 @@ export type Database = {
         Returns: boolean
       }
       reserve_admin_attempt: { Args: { _key: string }; Returns: boolean }
-      jood_admin_login: { Args: { _password: string }; Returns: string }
-      jood_admin_check: { Args: { _session: string }; Returns: boolean }
-      jood_admin_product_upsert: {
+      save_admin_product: {
         Args: {
-          _session: string
+          _category: string
+          _data: Json
           _id: string
           _name: string
-          _category: string
-          _price_yer: number
-          _compare_at_yer: number | null
-          _data: Json
-          _featured: boolean
-          _active: boolean
+          _price: number
+          _stock: number
         }
-        Returns: undefined
-      }
-      jood_admin_product_delete: {
-        Args: { _session: string; _id: string }
-        Returns: undefined
-      }
-      jood_admin_product_image_add: {
-        Args: {
-          _session: string
-          _product_id: string
-          _color: string
-          _path: string
-          _sort: number
-        }
-        Returns: string
-      }
-      jood_admin_product_image_delete: {
-        Args: { _session: string; _image_id: string }
         Returns: undefined
       }
     }
