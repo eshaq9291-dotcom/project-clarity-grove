@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Current request: working Add/Edit/Delete in existing hidden admin, same products table; replace failing external ERP product access with authorized internal access, no redesign or new test product.
+
 - [x] Seed exactly one Test Sandal: 15000 YER, stock 10, Black, EU 38; saved row and warehouse quantity verified.
 - [ ] Verify existing admin add/edit/delete and storefront visibility: blocked by published admin having no product controls, external ERP returning 401, and editable source lacking the published hidden admin page. Store uses static products; test product is not visible. No design changes made; earlier expansion deferred by user.
 
